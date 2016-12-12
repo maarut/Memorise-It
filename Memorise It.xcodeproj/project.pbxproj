@@ -7,21 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E34F70161DF9DFD40074F8F1 /* PlayFlashCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34F70151DF9DFD40074F8F1 /* PlayFlashCardViewController.swift */; };
+		E34F70191DF9E0140074F8F1 /* FlashCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34F70181DF9E0140074F8F1 /* FlashCard.swift */; };
 		E3B847FC1DF1DEA300FD259F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B847FB1DF1DEA300FD259F /* AppDelegate.swift */; };
-		E3B847FE1DF1DEA300FD259F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B847FD1DF1DEA300FD259F /* ViewController.swift */; };
+		E3B847FE1DF1DEA300FD259F /* ImageCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B847FD1DF1DEA300FD259F /* ImageCollectionViewController.swift */; };
 		E3B848011DF1DEA300FD259F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3B847FF1DF1DEA300FD259F /* Main.storyboard */; };
 		E3B848031DF1DEA300FD259F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3B848021DF1DEA300FD259F /* Assets.xcassets */; };
 		E3B848061DF1DEA300FD259F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3B848041DF1DEA300FD259F /* LaunchScreen.storyboard */; };
+		E3B8480E1DF7442E00FD259F /* AddSoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B8480D1DF7442E00FD259F /* AddSoundViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E34F70151DF9DFD40074F8F1 /* PlayFlashCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayFlashCardViewController.swift; sourceTree = "<group>"; };
+		E34F70181DF9E0140074F8F1 /* FlashCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashCard.swift; sourceTree = "<group>"; };
 		E3B847F81DF1DEA300FD259F /* Memorise It.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Memorise It.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3B847FB1DF1DEA300FD259F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E3B847FD1DF1DEA300FD259F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		E3B847FD1DF1DEA300FD259F /* ImageCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewController.swift; sourceTree = "<group>"; };
 		E3B848001DF1DEA300FD259F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E3B848021DF1DEA300FD259F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E3B848051DF1DEA300FD259F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E3B848071DF1DEA300FD259F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E3B8480D1DF7442E00FD259F /* AddSoundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSoundViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +41,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E34F70171DF9E0030074F8F1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E34F70181DF9E0140074F8F1 /* FlashCard.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		E3B847EF1DF1DEA300FD259F = {
 			isa = PBXGroup;
 			children = (
@@ -54,14 +68,33 @@
 		E3B847FA1DF1DEA300FD259F /* Memorise It */ = {
 			isa = PBXGroup;
 			children = (
+				E3B848101DF7443E00FD259F /* Storyboards */,
+				E34F70171DF9E0030074F8F1 /* Model */,
+				E3B8480F1DF7443400FD259F /* View Controllers */,
 				E3B847FB1DF1DEA300FD259F /* AppDelegate.swift */,
-				E3B847FD1DF1DEA300FD259F /* ViewController.swift */,
-				E3B847FF1DF1DEA300FD259F /* Main.storyboard */,
 				E3B848021DF1DEA300FD259F /* Assets.xcassets */,
-				E3B848041DF1DEA300FD259F /* LaunchScreen.storyboard */,
 				E3B848071DF1DEA300FD259F /* Info.plist */,
 			);
 			path = "Memorise It";
+			sourceTree = "<group>";
+		};
+		E3B8480F1DF7443400FD259F /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E3B847FD1DF1DEA300FD259F /* ImageCollectionViewController.swift */,
+				E3B8480D1DF7442E00FD259F /* AddSoundViewController.swift */,
+				E34F70151DF9DFD40074F8F1 /* PlayFlashCardViewController.swift */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		E3B848101DF7443E00FD259F /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				E3B847FF1DF1DEA300FD259F /* Main.storyboard */,
+				E3B848041DF1DEA300FD259F /* LaunchScreen.storyboard */,
+			);
+			name = Storyboards;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +170,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3B847FE1DF1DEA300FD259F /* ViewController.swift in Sources */,
+				E3B847FE1DF1DEA300FD259F /* ImageCollectionViewController.swift in Sources */,
 				E3B847FC1DF1DEA300FD259F /* AppDelegate.swift in Sources */,
+				E3B8480E1DF7442E00FD259F /* AddSoundViewController.swift in Sources */,
+				E34F70161DF9DFD40074F8F1 /* PlayFlashCardViewController.swift in Sources */,
+				E34F70191DF9E0140074F8F1 /* FlashCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +299,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = F53K8XZ6AA;
 				INFOPLIST_FILE = "Memorise It/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.maarut.Memorise-It";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -276,6 +313,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = F53K8XZ6AA;
 				INFOPLIST_FILE = "Memorise It/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.maarut.Memorise-It";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -302,6 +340,7 @@
 				E3B8480C1DF1DEA300FD259F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
