@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E34F70161DF9DFD40074F8F1 /* PlayFlashCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34F70151DF9DFD40074F8F1 /* PlayFlashCardViewController.swift */; };
-		E34F70191DF9E0140074F8F1 /* FlashCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34F70181DF9E0140074F8F1 /* FlashCard.swift */; };
+		E34F701D1DFEEA1D0074F8F1 /* FlashCards.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E34F701B1DFEEA1D0074F8F1 /* FlashCards.xcdatamodeld */; };
+		E34F701F1DFEEC920074F8F1 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34F701E1DFEEC920074F8F1 /* DataController.swift */; };
 		E3B847FC1DF1DEA300FD259F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B847FB1DF1DEA300FD259F /* AppDelegate.swift */; };
 		E3B847FE1DF1DEA300FD259F /* ImageCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B847FD1DF1DEA300FD259F /* ImageCollectionViewController.swift */; };
 		E3B848011DF1DEA300FD259F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3B847FF1DF1DEA300FD259F /* Main.storyboard */; };
@@ -19,7 +20,8 @@
 
 /* Begin PBXFileReference section */
 		E34F70151DF9DFD40074F8F1 /* PlayFlashCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayFlashCardViewController.swift; sourceTree = "<group>"; };
-		E34F70181DF9E0140074F8F1 /* FlashCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashCard.swift; sourceTree = "<group>"; };
+		E34F701C1DFEEA1D0074F8F1 /* FlashCards.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FlashCards.xcdatamodel; sourceTree = "<group>"; };
+		E34F701E1DFEEC920074F8F1 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		E3B847F81DF1DEA300FD259F /* Memorise It.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Memorise It.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3B847FB1DF1DEA300FD259F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E3B847FD1DF1DEA300FD259F /* ImageCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewController.swift; sourceTree = "<group>"; };
@@ -44,7 +46,8 @@
 		E34F70171DF9E0030074F8F1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				E34F70181DF9E0140074F8F1 /* FlashCard.swift */,
+				E34F701B1DFEEA1D0074F8F1 /* FlashCards.xcdatamodeld */,
+				E34F701E1DFEEC920074F8F1 /* DataController.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -124,7 +127,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Maarut Chandegra";
 				TargetAttributes = {
 					E3B847F71DF1DEA300FD259F = {
@@ -170,11 +173,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E34F701F1DFEEC920074F8F1 /* DataController.swift in Sources */,
+				E34F701D1DFEEA1D0074F8F1 /* FlashCards.xcdatamodeld in Sources */,
 				E3B847FE1DF1DEA300FD259F /* ImageCollectionViewController.swift in Sources */,
 				E3B847FC1DF1DEA300FD259F /* AppDelegate.swift in Sources */,
 				E3B8480E1DF7442E00FD259F /* AddSoundViewController.swift in Sources */,
 				E34F70161DF9DFD40074F8F1 /* PlayFlashCardViewController.swift in Sources */,
-				E34F70191DF9E0140074F8F1 /* FlashCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,6 +222,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -268,6 +273,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -343,6 +349,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		E34F701B1DFEEA1D0074F8F1 /* FlashCards.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E34F701C1DFEEA1D0074F8F1 /* FlashCards.xcdatamodel */,
+			);
+			currentVersion = E34F701C1DFEEA1D0074F8F1 /* FlashCards.xcdatamodel */;
+			path = FlashCards.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = E3B847F01DF1DEA300FD259F /* Project object */;
 }

@@ -9,13 +9,19 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate
+{
 
     var window: UIWindow?
+    var dataController: DataController!
 
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+    func application(_ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+    {
+        dataController = DataController(withModelName: "FlashCards")
+        let rootVC = (window?.rootViewController as? UINavigationController)?
+            .topViewController as? ImageCollectionViewController
+        rootVC?.dataController = dataController
         return true
     }
 

@@ -8,19 +8,26 @@
 
 import UIKit
 import MobileCoreServices
+import CoreData
 
 class ImageCollectionViewController: UIViewController
 {
+    var dataController: DataController!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addButton: UIBarButtonItem!
     
     fileprivate let imagePickerController = UIImagePickerController()
+    fileprivate var allFlashCards: NSFetchedResultsController<FlashCard>!
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         imagePickerController.delegate = self
         imagePickerController.sourceType = .photoLibrary
+        allFlashCards = dataController.allFlashCards()
+        allFlashCards.delegate = self
+        do { try allFlashCards.performFetch() }
+        catch let error as NSError { NSLog("\(error)\n\(error.localizedDescription)") }
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -28,8 +35,9 @@ class ImageCollectionViewController: UIViewController
     {
         switch segue.identifier ?? "" {
         case "playSegue":
-            if let nextVC = segue.destination as? PlayFlashCardViewController {
-                nextVC.flashCard = nil
+            if let nextVC = segue.destination as? PlayFlashCardViewController,
+                let flashCard = sender as? FlashCard {
+                nextVC.flashCard = flashCard
             }
             break
         default:
@@ -137,7 +145,9 @@ extension ImageCollectionViewController: UICollectionViewDelegate
 {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
-        performSegue(withIdentifier: "playSegue", sender: nil)
+        if let card = allFlashCards.fetchedObjects?[indexPath.row] {
+            performSegue(withIdentifier: "playSegue", sender: card)
+        }
     }
 }
 
@@ -146,7 +156,7 @@ extension ImageCollectionViewController: UICollectionViewDataSource
 {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
-        return 4
+        return allFlashCards.fetchedObjects?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
@@ -162,6 +172,7 @@ extension ImageCollectionViewController: UIImagePickerControllerDelegate
     {
         if let nextVC = storyboard?.instantiateViewController(
             withIdentifier: "addSoundViewController") as? AddSoundViewController {
+            nextVC.dataController = dataController
             if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
                 nextVC.image = editedImage
             }
@@ -176,6 +187,12 @@ extension ImageCollectionViewController: UIImagePickerControllerDelegate
 
 // MARK: - UINavigationControllerDelegate Implementation
 extension ImageCollectionViewController: UINavigationControllerDelegate
+{
+    
+}
+
+// MARK: - NSFetchResultsControllerDelegate Implementation
+extension ImageCollectionViewController: NSFetchedResultsControllerDelegate
 {
     
 }

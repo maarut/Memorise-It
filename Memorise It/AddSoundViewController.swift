@@ -15,10 +15,12 @@ fileprivate let kAddSoundViewControllerErrorDomain = "net.maarut.Memorise-It.Add
 class AddSoundViewController: UIViewController
 {
     var image: UIImage!
+    var dataController: DataController!
     
     fileprivate var audioRecorder: AVAudioRecorder!
     fileprivate var audioPlayer: AVAudioPlayer!
-    fileprivate var recordedAudioPath: URL?
+    fileprivate var recordedAudioFileName: String?
+    fileprivate var documentsDirectory: URL?
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var recordButton: UIButton!
@@ -44,7 +46,7 @@ class AddSoundViewController: UIViewController
     {
         removePreviousRecording()
         do {
-            audioRecorder = try AVAudioRecorder(url: filePath(), settings: [
+            audioRecorder = try AVAudioRecorder(url: filePath().appendingPathComponent(fileName()), settings: [
                 AVFormatIDKey               : kAudioFormatMPEG4AAC          as AnyObject,
                 AVNumberOfChannelsKey       : 1                             as AnyObject,
                 AVSampleRateKey             : 44100.0                       as AnyObject,
@@ -66,8 +68,10 @@ class AddSoundViewController: UIViewController
     
     @IBAction func playAudio(_ sender: UIButton)
     {
-        if let recordedAudioPath = recordedAudioPath {
-            audioPlayer = try! AVAudioPlayer(contentsOf: recordedAudioPath)
+        if let recordedAudioFileName = recordedAudioFileName, let documentsDirectory = documentsDirectory {
+            audioPlayer = try! AVAudioPlayer(
+                contentsOf: documentsDirectory.appendingPathComponent(recordedAudioFileName))
+            audioPlayer.delegate = self
             audioPlayer.play()
             playButton.removeTarget(self, action: #selector(playAudio(_:)), for: .touchUpInside)
             playButton.addTarget(self, action: #selector(stopPlayback(_:)), for: .touchUpInside)
@@ -101,20 +105,34 @@ class AddSoundViewController: UIViewController
     func doneSelected(_ barButton: UIBarButtonItem)
     {
         // save the image and sound to the storage medium.
+        if let imageData = UIImagePNGRepresentation(image),
+            let recordedAudioFileName = recordedAudioFileName {
+            dataController.addFlashCard(image: imageData, audioFileName: recordedAudioFileName, dateAdded: Date())
+        }
+        else {
+            NSLog("Unable to save image and audio data.")
+        }
         navigationController?.dismiss(animated: true, completion: nil)
+
     }
 }
 
 // MARK: - Private Functions
 fileprivate extension AddSoundViewController
 {
+    func fileName() -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYYMMddHHmmss"
+        let fileName = dateFormatter.string(from: Date()) + ".m4a"
+        return fileName
+    }
+    
     func filePath() throws -> URL
     {
-        if let directory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "YYYYMMddHHmmss"
-            let fileName = dateFormatter.string(from: Date()) + ".m4a"
-            return URL(fileURLWithPath: directory).appendingPathComponent(fileName)
+        if let directory = FileManager.default.urls(for: .documentDirectory , in: .userDomainMask).first {
+            documentsDirectory = directory
+            return directory//.appendingPathComponent(fileName())
         }
         throw NSError(domain: kAddSoundViewControllerErrorDomain,
             code: 1,
@@ -125,18 +143,26 @@ fileprivate extension AddSoundViewController
     
     func removePreviousRecording()
     {
-        if let recordedAudioPath = recordedAudioPath {
-            if FileManager.default.fileExists(atPath: recordedAudioPath.absoluteString) {
-                do {
-                    try FileManager.default.removeItem(at: recordedAudioPath)
-                    self.recordedAudioPath = nil
-                }
-                catch let error as NSError {
-                    NSLog("Unable to delete previous recording.")
-                    NSLog("\(error.localizedDescription)\n\(error.description)")
-                }
+        if let recordedAudioFileName = recordedAudioFileName, let documentsDirectory = documentsDirectory {
+            do {
+                try FileManager.default.removeItem(at: documentsDirectory.appendingPathComponent(recordedAudioFileName))
+                self.recordedAudioFileName = nil
+            }
+            catch let error as NSError {
+                NSLog("Unable to delete previous recording.")
+                NSLog("\(error.localizedDescription)\n\(error.description)")
             }
         }
+    }
+}
+
+// MARK: - AVAudioPlayerDelegate Implementation
+extension AddSoundViewController: AVAudioPlayerDelegate
+{
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool)
+    {
+        stopPlayback(playButton)
+        if !flag { NSLog("Did not successfully play back audio.") }
     }
 }
 
@@ -145,7 +171,8 @@ extension AddSoundViewController: AVAudioRecorderDelegate
 {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool)
     {
-        recordedAudioPath = recorder.url
+        assert(recorder.url.deletingLastPathComponent() == documentsDirectory)
+        recordedAudioFileName = recorder.url.lastPathComponent
     }
     
     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?)

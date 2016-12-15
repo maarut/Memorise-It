@@ -9,6 +9,8 @@
 import UIKit
 import AVFoundation
 
+fileprivate let kPlayFlashCardViewControllerErrorDomain = "net.maarut.Memorise-It.PlayFlashCardViewController"
+
 class PlayFlashCardViewController: UIViewController
 {
     var flashCard: FlashCard?
@@ -16,15 +18,23 @@ class PlayFlashCardViewController: UIViewController
     @IBOutlet weak var informationOverlayContainer: UIView!
     @IBOutlet weak var informationOverlayText: UILabel!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet var tapGestureRecogniser: UITapGestureRecognizer!
+    
     fileprivate var audioPlayer: AVAudioPlayer?
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         if let flashCard = flashCard {
-            imageView.image = flashCard.image
+            if let imageData = flashCard.image as Data? {
+                imageView.image = UIImage(data: imageData)
+            }
             do {
-                audioPlayer = try AVAudioPlayer(contentsOf: flashCard.audio.url)
+                if let audioURLString = flashCard.audioFileName {
+                    let audioURL = try pathToAudioFile(audioURLString)
+                    audioPlayer = try AVAudioPlayer(contentsOf: audioURL)
+                    audioPlayer?.delegate = self
+                }
             }
             catch let error as NSError {
                 NSLog("\(error.description)\n\(error.localizedDescription)")
@@ -61,6 +71,7 @@ class PlayFlashCardViewController: UIViewController
     {
         sender.removeTarget(self, action: #selector(tapRecognised(_:)))
         sender.addTarget(self, action: #selector(stopPlayback(_:)))
+        audioPlayer?.currentTime = 0.0
         audioPlayer?.play()
     }
     
@@ -72,23 +83,27 @@ class PlayFlashCardViewController: UIViewController
     }
 }
 
-private class ProxyUIGestureRecogniserDelegate: NSObject, UIGestureRecognizerDelegate
+// MARK: - AVAudioPlayerDelegate Implementation
+extension PlayFlashCardViewController: AVAudioPlayerDelegate
 {
-    var target: UIGestureRecognizerDelegate
-    
-    init(target: UIGestureRecognizerDelegate)
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool)
     {
-        self.target = target
-        super.init()
+        stopPlayback(tapGestureRecogniser)
     }
-    
-    override func forwardingTarget(for aSelector: Selector!) -> Any?
+}
+
+// MARK: - Private Functions
+fileprivate extension PlayFlashCardViewController
+{
+    func pathToAudioFile(_ fileName: String) throws -> URL
     {
-        return target
-    }
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool
-    {
-        return true
+        if let directory = FileManager.default.urls(for: .documentDirectory , in: .userDomainMask).first {
+            return directory.appendingPathComponent(fileName)
+        }
+        throw NSError(domain: kPlayFlashCardViewControllerErrorDomain,
+            code: 1,
+            userInfo: [
+                NSLocalizedDescriptionKey :"Could not get a path to the Documents directory for the current user",
+            ])
     }
 }
