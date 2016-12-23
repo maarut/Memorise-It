@@ -19,8 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
         dataController = DataController(withModelName: "FlashCards")
-        let rootVC = (window?.rootViewController as? UINavigationController)?
-            .topViewController as? ImageCollectionViewController
+        /*let rootVC = (window?.rootViewController as? UINavigationController)?
+            .topViewController as? ImageCollectionViewController*/
+        let rootVC = window?.rootViewController as? ImageCollectionViewController
         rootVC?.dataController = dataController
         return true
     }

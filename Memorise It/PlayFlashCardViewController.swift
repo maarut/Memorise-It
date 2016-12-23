@@ -69,10 +69,20 @@ class PlayFlashCardViewController: UIViewController
     
     @IBAction func tapRecognised(_ sender: UITapGestureRecognizer)
     {
+        let newNavItem = UINavigationItem(title: "Hello")
+        newNavItem.backBarButtonItem = UIBarButtonItem(title: "Hello", style: .plain, target: self,
+                                                       action: #selector(hello(_:)))
+        navigationController?.navigationBar.pushItem(newNavItem, animated: true)
         sender.removeTarget(self, action: #selector(tapRecognised(_:)))
         sender.addTarget(self, action: #selector(stopPlayback(_:)))
         audioPlayer?.currentTime = 0.0
         audioPlayer?.play()
+    }
+    
+    func hello(_ sender: UIBarButtonItem)
+    {
+        NSLog("tapped")
+        let _ = navigationController?.navigationBar.popItem(animated: true)
     }
     
     func stopPlayback(_ sender: UITapGestureRecognizer)
