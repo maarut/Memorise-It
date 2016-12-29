@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1212" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
-        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -106,7 +104,6 @@
                         <outlet property="addButton" destination="9xi-xY-o2x" id="qZY-AV-MbJ"/>
                         <outlet property="collectionView" destination="HUV-HB-eZE" id="EQV-ma-P7o"/>
                         <outlet property="customNavBar" destination="5dr-9S-mkQ" id="qzX-fx-84n"/>
-                        <segue destination="kJa-fU-9kG" kind="show" identifier="playSegue" action="showDetailViewController:sender:" id="oGp-Bd-SgT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -116,7 +113,7 @@
         <!--Play Flash Card View Controller-->
         <scene sceneID="g6G-ST-qnL">
             <objects>
-                <viewController id="kJa-fU-9kG" customClass="PlayFlashCardViewController" customModule="Memorise_It" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="flashCardDetailViewController" id="kJa-fU-9kG" customClass="PlayFlashCardViewController" customModule="Memorise_It" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MMP-CP-wn9"/>
                         <viewControllerLayoutGuide type="bottom" id="FlL-1L-hvp"/>
@@ -125,52 +122,34 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="T5l-4a-fzx">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                <gestureRecognizers/>
-                            </imageView>
                             <view alpha="0.65000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oUa-zL-lTr">
-                                <rect key="frame" x="70.5" y="72" width="233.5" height="61"/>
+                                <rect key="frame" x="70.5" y="38" width="233.5" height="61"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PYq-Uv-j23">
-                                <rect key="frame" x="80.5" y="82" width="213.5" height="41"/>
+                                <rect key="frame" x="80.5" y="48" width="213.5" height="41"/>
                                 <string key="text">Tap on the image to play
 the audio associated with it.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="222-sp-wbj">
-                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                                <items>
-                                    <navigationItem title="Title" id="CXE-J1-QbR"/>
-                                </items>
-                            </navigationBar>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="T5l-4a-fzx" firstAttribute="leading" secondItem="zPI-I6-7Gx" secondAttribute="leading" id="2M2-4O-bNl"/>
-                            <constraint firstItem="oUa-zL-lTr" firstAttribute="centerX" secondItem="T5l-4a-fzx" secondAttribute="centerX" id="3xq-aL-yVs"/>
-                            <constraint firstItem="222-sp-wbj" firstAttribute="leading" secondItem="zPI-I6-7Gx" secondAttribute="leading" id="6BR-xx-eWQ"/>
+                            <constraint firstItem="oUa-zL-lTr" firstAttribute="centerX" secondItem="zPI-I6-7Gx" secondAttribute="centerX" id="B7L-F6-wNk"/>
                             <constraint firstItem="PYq-Uv-j23" firstAttribute="centerX" secondItem="oUa-zL-lTr" secondAttribute="centerX" id="Gy8-Nz-Laq"/>
                             <constraint firstItem="PYq-Uv-j23" firstAttribute="centerY" secondItem="oUa-zL-lTr" secondAttribute="centerY" id="JCw-2w-JKd"/>
                             <constraint firstItem="oUa-zL-lTr" firstAttribute="width" secondItem="PYq-Uv-j23" secondAttribute="width" constant="20" id="K2I-VF-EHe"/>
-                            <constraint firstItem="T5l-4a-fzx" firstAttribute="top" secondItem="222-sp-wbj" secondAttribute="bottom" id="eNJ-lA-3bf"/>
-                            <constraint firstItem="222-sp-wbj" firstAttribute="top" secondItem="MMP-CP-wn9" secondAttribute="bottom" id="eXJ-pe-HIp"/>
                             <constraint firstItem="oUa-zL-lTr" firstAttribute="height" secondItem="PYq-Uv-j23" secondAttribute="height" constant="20" id="fsr-Hd-QPv"/>
-                            <constraint firstItem="T5l-4a-fzx" firstAttribute="bottom" secondItem="FlL-1L-hvp" secondAttribute="top" id="ifV-Kt-4e1"/>
-                            <constraint firstItem="oUa-zL-lTr" firstAttribute="top" secondItem="T5l-4a-fzx" secondAttribute="topMargin" id="kKS-yF-X6l"/>
-                            <constraint firstItem="222-sp-wbj" firstAttribute="trailing" secondItem="T5l-4a-fzx" secondAttribute="trailing" id="t6k-S2-yLO"/>
-                            <constraint firstAttribute="trailing" secondItem="T5l-4a-fzx" secondAttribute="trailing" id="zoW-a6-eut"/>
+                            <constraint firstItem="PYq-Uv-j23" firstAttribute="top" secondItem="MMP-CP-wn9" secondAttribute="bottom" multiplier="2" constant="8" symbolic="YES" id="xOZ-x8-vVM"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="oY7-f4-brg" appends="YES" id="DyV-p9-Y07"/>
+                            <outletCollection property="gestureRecognizers" destination="xkJ-ST-4Rf" appends="YES" id="acb-fY-dHg"/>
                         </connections>
                     </view>
                     <connections>
-                        <outlet property="imageView" destination="T5l-4a-fzx" id="ciQ-0d-fIG"/>
                         <outlet property="informationOverlayContainer" destination="oUa-zL-lTr" id="Syf-vi-4LM"/>
                         <outlet property="informationOverlayText" destination="PYq-Uv-j23" id="avq-gq-e99"/>
                         <outlet property="tapGestureRecogniser" destination="oY7-f4-brg" id="ZXm-Oi-ZVw"/>
@@ -182,6 +161,11 @@ the audio associated with it.</string>
                         <action selector="tapRecognised:" destination="kJa-fU-9kG" id="cEC-RF-E4s"/>
                     </connections>
                 </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="xkJ-ST-4Rf">
+                    <connections>
+                        <action selector="panRecognised:" destination="kJa-fU-9kG" id="DSK-G1-lVJ"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1924" y="778"/>
         </scene>
