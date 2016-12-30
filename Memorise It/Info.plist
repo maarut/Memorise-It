@@ -2,10 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Uses the microphone to record a note to be attached to a flash card.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Images from the camera roll can be selected by the user to use as a flash card.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Use the camera to capture an image for use as a flash card.</string>
+	<string>Uses the camera to capture an image for use as a flash card.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>

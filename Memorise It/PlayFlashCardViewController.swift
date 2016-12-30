@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 
 fileprivate let kPlayFlashCardViewControllerErrorDomain = "net.maarut.Memorise-It.PlayFlashCardViewController"
-
+fileprivate let kCoverPanelWidth: CGFloat = 44.0
 enum Position
 {
     case next
@@ -42,14 +42,13 @@ class PlayFlashCardViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        if let flashCard = delegate?.flashCard(for: .current) {
-            if let imageData = flashCard.image as Data? {
-                let iv = UIImageView(image: UIImage(data: imageData))
-                iv.translatesAutoresizingMaskIntoConstraints = false
-                iv.contentMode = .scaleAspectFit
-                self.view.addSubview(iv)
-                imageView = iv
-            }
+        if let flashCard = delegate?.flashCard(for: .current),
+            let imageData = flashCard.image as Data? {
+            let iv = UIImageView(image: UIImage(data: imageData))
+            iv.translatesAutoresizingMaskIntoConstraints = false
+            iv.contentMode = .scaleAspectFit
+            view.addSubview(iv)
+            imageView = iv
         }
         informationOverlayContainer.layer.cornerRadius = 10
     }
@@ -95,7 +94,7 @@ class PlayFlashCardViewController: UIViewController
     
     @IBAction func panRecognised(_ sender: UIPanGestureRecognizer)
     {
-        guard let direction = determineDirection(sender.translation(in: self.view)) else { return }
+        guard let direction = determinePanDirection(sender.translation(in: self.view)) else { return }
         let selector: Selector
         switch direction {
         case UISwipeGestureRecognizerDirection.up,
@@ -133,53 +132,48 @@ fileprivate extension PlayFlashCardViewController
     {
         guard let previousFlashCard = delegate?.flashCard(for: .previous),
             let nextFlashCard = delegate?.flashCard(for: .next) else {
-                return
+            return
         }
-        let translation = sender.translation(in: self.view)
+        let translation = sender.translation(in: view)
         switch sender.state {
         case .changed:
-            if view.subviews.filter( { $0 is UIImageView } ).count == 1 {
-                let prevImage = UIImageView(frame: view.frame)
-                prevImage.frame.origin.x -= (prevImage.frame.width + 44)
-                prevImage.contentMode = .scaleAspectFit
-                prevImage.image = UIImage(data: previousFlashCard.image! as Data)
-                let nextImage = UIImageView(frame: view.frame)
-                nextImage.frame.origin.x += (nextImage.frame.width + 44)
-                nextImage.contentMode = .scaleAspectFit
-                nextImage.image = UIImage(data: nextFlashCard.image! as Data)
-                view.addSubview(prevImage)
-                view.addSubview(nextImage)
+            let imageViews = view.subviews.filter { $0 is UIImageView }
+            if imageViews.count == 1 {
+                setUpAdjacentImageViews(previousImageData: previousFlashCard.image! as Data,
+                    nextImageData: nextFlashCard.image! as Data)
             }
-            for view in view.subviews.filter( { $0 is UIImageView } ) {
-                view.transform = CGAffineTransform(translationX: translation.x, y: 0)
+            let coverViews = view.subviews.filter { $0.frame.width.isRoughlyEqualTo(kCoverPanelWidth) }
+            let coverViewOffset = kCoverPanelWidth * (translation.x / view.frame.width)
+            for view in imageViews { view.transform = CGAffineTransform(translationX: translation.x, y: 0) }
+            for view in coverViews {
+                view.transform = CGAffineTransform(translationX: translation.x + coverViewOffset, y: 0)
             }
         case .ended:
             let width = view.frame.width
-            let newOriginMagnitude = (width / 2) < abs(translation.x) ? (width + 44) : 0
+            let newOriginMagnitude = (width / 2) < abs(translation.x) ? (width) : 0
             let newOriginVector = translation.x > 0 ? newOriginMagnitude : -newOriginMagnitude
-            let imageViews = self.view.subviews.filter( { $0 is UIImageView } )
-            switch newOriginVector {
-            case let x where x < 0: delegate?.didPan(to: .next)
-            case let x where x > 0: delegate?.didPan(to: .previous)
-            default:                break
-            }
+            let imageViews = view.subviews.filter { $0 is UIImageView }
+            let coverViews = view.subviews.filter { $0.frame.width.isRoughlyEqualTo(kCoverPanelWidth) }
+            let panPosition = newPosition(newOriginVector)
+            let translationX = finalCoverPanelTranslation(panPosition, vector: newOriginVector)
+            
             UIView.animate(withDuration: 0.3, animations: {
                 for view in imageViews {
                     view.transform = CGAffineTransform(translationX: newOriginVector, y: 0)
                 }
+                for view in coverViews { view.transform = CGAffineTransform(translationX: translationX, y: 0) }
             }, completion: { _ in
                 if let image = self.delegate?.flashCard(for: .current).image as? Data {
                     self.imageView.image = UIImage(data: image)
                 }
                 for view in imageViews {
                     view.transform = CGAffineTransform.identity
-                    if !self.view.point(inside: view.convert(view.center, to: self.view), with: nil) {
-                        view.removeFromSuperview()
-                    }
+                    if self.shouldRemove(view: view) { view.removeFromSuperview() }
                 }
+                for view in coverViews { view.removeFromSuperview() }
             })
             revertTargetAction(for: sender)
-            
+            delegate?.didPan(to: panPosition)
             break
         default:
             return
@@ -193,13 +187,13 @@ fileprivate extension PlayFlashCardViewController
         switch sender.state {
         case .changed:
             let center = CGPoint(x: view.center.x + translation.x, y: view.center.y + translation.y)
+            let ratio = imageViewShrinkRatio(motionMagnitude: magnitude)
             imageView.center = center
-            imageView.frame.size = CGSize(width: view.frame.width * max(1.0 - magnitude / 1000, 0.8),
-                                          height: view.frame.height * max(1.0 - magnitude / 1000, 0.8))
-            view.backgroundColor = UIColor(white: 0, alpha: 1.0 - magnitude / 500.0)
+            imageView.frame.size = CGSize(width: view.frame.width * ratio, height: view.frame.height * ratio)
+            view.backgroundColor = UIColor(white: 0, alpha: alphaRatio(motionMagnitude: magnitude))
             break
         case .ended:
-            if magnitude > 25 {
+            if shouldDismiss(with: magnitude) {
                 dismiss(to: delegate?.dismissContentTo(in: self.view) ?? CGRect.zero)
             }
             else {
@@ -231,7 +225,7 @@ fileprivate extension PlayFlashCardViewController
         gesture.addTarget(self, action: #selector(panRecognised(_:)))
     }
     
-    func determineDirection(_ point: CGPoint) -> UISwipeGestureRecognizerDirection?
+    func determinePanDirection(_ point: CGPoint) -> UISwipeGestureRecognizerDirection?
     {
         switch (point.x, point.y) {
         case let (x, y) where x < y && y <= 0:  return UISwipeGestureRecognizerDirection.left
@@ -240,7 +234,6 @@ fileprivate extension PlayFlashCardViewController
         case let (x, y) where y > x && x >= 0:  return UISwipeGestureRecognizerDirection.down
         default:                                return nil
         }
-        
     }
     
     func pathToAudioFile(_ fileName: String) throws -> URL
@@ -253,5 +246,75 @@ fileprivate extension PlayFlashCardViewController
             userInfo: [
                 NSLocalizedDescriptionKey :"Could not get a path to the Documents directory for the current user",
             ])
+    }
+    
+    func newPosition(_ vector: CGFloat) -> Position
+    {
+        switch vector {
+        case let x where x < 0: return .next
+        case let x where x > 0: return .previous
+        default:                return .current
+        }
+    }
+    
+    func finalCoverPanelTranslation(_ position: Position, vector: CGFloat) -> CGFloat
+    {
+        switch position {
+        case .previous: return vector + kCoverPanelWidth
+        case .next:     return vector - kCoverPanelWidth
+        case .current:  return 0
+        }
+    }
+    
+    func setUpAdjacentImageViews(previousImageData: Data, nextImageData: Data)
+    {
+        let prevImage = UIImageView(frame: view.frame)
+        prevImage.frame.origin.x -= (prevImage.frame.width)
+        prevImage.contentMode = .scaleAspectFit
+        prevImage.image = UIImage(data: previousImageData)
+        let nextImage = UIImageView(frame: view.frame)
+        nextImage.frame.origin.x += (nextImage.frame.width)
+        nextImage.contentMode = .scaleAspectFit
+        nextImage.image = UIImage(data: nextImageData as Data)
+        let nextCoverView = UIView(frame: CGRect(origin: CGPoint(x: nextImage.frame.width, y: 0),
+            size: CGSize(width: kCoverPanelWidth, height: view.frame.height)))
+        nextCoverView.backgroundColor = UIColor.black
+        let prevCoverView = UIView(frame: CGRect(origin: CGPoint(x: -kCoverPanelWidth, y: 0),
+            size: CGSize(width: kCoverPanelWidth, height: view.frame.height)))
+        prevCoverView.backgroundColor = UIColor.black
+        view.addSubview(prevImage)
+        view.addSubview(nextImage)
+        view.addSubview(nextCoverView)
+        view.addSubview(prevCoverView)
+        view.bringSubview(toFront: informationOverlayContainer)
+        view.bringSubview(toFront: informationOverlayText)
+    }
+    
+    func imageViewShrinkRatio(motionMagnitude: CGFloat) -> CGFloat
+    {
+        return max(1.0 - (motionMagnitude / 400), 0.6)
+    }
+    
+    func alphaRatio(motionMagnitude:CGFloat) -> CGFloat
+    {
+        return 1.0 - (motionMagnitude / 200.0)
+    }
+    
+    func shouldDismiss(with magnitude: CGFloat) -> Bool
+    {
+        return magnitude > 25
+    }
+    
+    func shouldRemove(view: UIView) -> Bool
+    {
+        return !self.view.point(inside: view.convert(view.center, to: self.view), with: nil)
+    }
+}
+
+fileprivate extension CGFloat
+{
+    func isRoughlyEqualTo(_ rhs: CGFloat) -> Bool
+    {
+        return self > (rhs * 0.99) && self < (rhs * 1.01)
     }
 }
