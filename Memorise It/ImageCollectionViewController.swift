@@ -21,12 +21,14 @@ class ImageCollectionViewController: UIViewController
     fileprivate var allFlashCards: NSFetchedResultsController<FlashCard>!
     fileprivate var selectedCell: IndexPath?
     fileprivate weak var detailViewController: UIViewController?
+    fileprivate var changes = [NSFetchedResultsChangeType : [IndexPath]]()
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         imagePickerController.delegate = self
         imagePickerController.sourceType = .photoLibrary
+        customNavBar.topItem?.leftBarButtonItem = editButtonItem
         allFlashCards = dataController.allFlashCards()
         allFlashCards.delegate = self
         do { try allFlashCards.performFetch() }
@@ -36,6 +38,13 @@ class ImageCollectionViewController: UIViewController
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem)
     {
         present(nextVCOnAddButtonTap(), animated: true, completion: nil)
+    }
+    
+    override func setEditing(_ editing: Bool, animated: Bool)
+    {
+        super.setEditing(editing, animated: animated)
+        NSLog("Editing")
+        
     }
 }
 
@@ -96,6 +105,7 @@ fileprivate extension ImageCollectionViewController
                 break
             }
         }
+        buttons.append(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         return buttons
     }
     
@@ -210,7 +220,35 @@ extension ImageCollectionViewController: UINavigationControllerDelegate
 // MARK: - NSFetchResultsControllerDelegate Implementation
 extension ImageCollectionViewController: NSFetchedResultsControllerDelegate
 {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
+    {
+        collectionView.performBatchUpdates({
+            for (type, indexPaths) in self.changes {
+                switch type {
+                case .insert:   self.collectionView.insertItems(at: indexPaths)
+                case .delete:   self.collectionView.deleteItems(at: indexPaths)
+                default:        break
+                }
+            }
+        }, completion: { _ in self.changes = [:] })
+    }
     
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any,
+        at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
+    {
+        switch type {
+        case .insert:
+            if changes[.insert] == nil { changes[.insert] = [] }
+            changes[.insert]!.append(newIndexPath!)
+            break
+        case .delete:
+            if changes[.delete] == nil { changes[.delete] = [] }
+            changes[.delete]!.append(indexPath!)
+            break
+        default:
+            break
+        }
+    }
 }
 
 // MARK: - UINavigationBarDelegate Implementation

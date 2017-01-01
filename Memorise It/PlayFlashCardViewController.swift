@@ -11,6 +11,7 @@ import AVFoundation
 
 fileprivate let kPlayFlashCardViewControllerErrorDomain = "net.maarut.Memorise-It.PlayFlashCardViewController"
 fileprivate let kCoverPanelWidth: CGFloat = 44.0
+
 enum Position
 {
     case next
@@ -103,6 +104,7 @@ class PlayFlashCardViewController: UIViewController
              UISwipeGestureRecognizerDirection.right:   selector = #selector(panToNextImage(using:))
         default:                                        return
         }
+        perform(selector, with: sender)
         sender.removeTarget(self, action: nil)
         sender.addTarget(self, action: selector)
     }
@@ -135,18 +137,18 @@ fileprivate extension PlayFlashCardViewController
             return
         }
         let translation = sender.translation(in: view)
+        let animationDuration = animationDurationForPan(in: sender.state)
         switch sender.state {
-        case .changed:
-            let imageViews = view.subviews.filter { $0 is UIImageView }
-            if imageViews.count == 1 {
-                setUpAdjacentImageViews(previousImageData: previousFlashCard.image! as Data,
-                    nextImageData: nextFlashCard.image! as Data)
-            }
+        case .began, .changed:
+            let imageViews = setUpAdjacentImageViews(previousImageData: previousFlashCard.image! as Data,
+                nextImageData: nextFlashCard.image! as Data)
             let coverViews = view.subviews.filter { $0.frame.width.isRoughlyEqualTo(kCoverPanelWidth) }
             let coverViewOffset = kCoverPanelWidth * (translation.x / view.frame.width)
-            for view in imageViews { view.transform = CGAffineTransform(translationX: translation.x, y: 0) }
-            for view in coverViews {
-                view.transform = CGAffineTransform(translationX: translation.x + coverViewOffset, y: 0)
+            UIView.animate(withDuration: animationDuration) {
+                for view in imageViews { view.transform = CGAffineTransform(translationX: translation.x, y: 0) }
+                for view in coverViews {
+                    view.transform = CGAffineTransform(translationX: translation.x + coverViewOffset, y: 0)
+                }
             }
         case .ended:
             let width = view.frame.width
@@ -157,7 +159,7 @@ fileprivate extension PlayFlashCardViewController
             let panPosition = newPosition(newOriginVector)
             let translationX = finalCoverPanelTranslation(panPosition, vector: newOriginVector)
             
-            UIView.animate(withDuration: 0.3, animations: {
+            UIView.animate(withDuration: animationDuration, animations: {
                 for view in imageViews {
                     view.transform = CGAffineTransform(translationX: newOriginVector, y: 0)
                 }
@@ -193,7 +195,7 @@ fileprivate extension PlayFlashCardViewController
             view.backgroundColor = UIColor(white: 0, alpha: alphaRatio(motionMagnitude: magnitude))
             break
         case .ended:
-            if shouldDismiss(with: magnitude) {
+            if shouldDismiss(given: magnitude) {
                 dismiss(to: delegate?.dismissContentTo(in: self.view) ?? CGRect.zero)
             }
             else {
@@ -266,8 +268,10 @@ fileprivate extension PlayFlashCardViewController
         }
     }
     
-    func setUpAdjacentImageViews(previousImageData: Data, nextImageData: Data)
+    func setUpAdjacentImageViews(previousImageData: Data, nextImageData: Data) -> [UIImageView]
     {
+        let imageViews = view.subviews.flatMap { $0 as? UIImageView }
+        guard imageViews.count == 1 else { return imageViews }
         let prevImage = UIImageView(frame: view.frame)
         prevImage.frame.origin.x -= (prevImage.frame.width)
         prevImage.contentMode = .scaleAspectFit
@@ -288,6 +292,7 @@ fileprivate extension PlayFlashCardViewController
         view.addSubview(prevCoverView)
         view.bringSubview(toFront: informationOverlayContainer)
         view.bringSubview(toFront: informationOverlayText)
+        return imageViews + [prevImage, nextImage]
     }
     
     func imageViewShrinkRatio(motionMagnitude: CGFloat) -> CGFloat
@@ -300,7 +305,7 @@ fileprivate extension PlayFlashCardViewController
         return 1.0 - (motionMagnitude / 200.0)
     }
     
-    func shouldDismiss(with magnitude: CGFloat) -> Bool
+    func shouldDismiss(given magnitude: CGFloat) -> Bool
     {
         return magnitude > 25
     }
@@ -308,6 +313,14 @@ fileprivate extension PlayFlashCardViewController
     func shouldRemove(view: UIView) -> Bool
     {
         return !self.view.point(inside: view.convert(view.center, to: self.view), with: nil)
+    }
+    
+    func animationDurationForPan(in state: UIGestureRecognizerState) -> TimeInterval
+    {
+        switch state {
+        case .began, .ended:    return 0.3
+        default:                return 0.01
+        }
     }
 }
 

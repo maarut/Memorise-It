@@ -19,13 +19,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
         dataController = DataController(withModelName: "FlashCards")
-        /*let rootVC = (window?.rootViewController as? UINavigationController)?
-            .topViewController as? ImageCollectionViewController*/
         let rootVC = window?.rootViewController as? ImageCollectionViewController
         rootVC?.dataController = dataController
+        pruneDocumentsDirectory()
         return true
     }
 
+    func pruneDocumentsDirectory()
+    {
+        
+        if let flashCardFileNames = dataController.allFlashCards().fetchedObjects?.map( { $0.audioFileName! } ),
+            let directory = FileManager.default.urls(for: .documentDirectory , in: .userDomainMask).first {
+            do {
+                let directoryFileNames = try FileManager.default.contentsOfDirectory(at: directory,
+                    includingPropertiesForKeys: nil).map( { $0.lastPathComponent } )
+                let directoryFileNamesSet = Set(directoryFileNames)
+                let flashCardFileNamesSet = Set(flashCardFileNames)
+                let extraneousFiles = directoryFileNamesSet.subtracting(flashCardFileNamesSet)
+                    .map { directory.appendingPathComponent($0) }
+                for filePath in extraneousFiles { try FileManager.default.removeItem(at: filePath) }
+            }
+            catch let error as NSError {
+                NSLog("\(error)\n\(error.localizedDescription)")
+            }
+        }
+    }
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.

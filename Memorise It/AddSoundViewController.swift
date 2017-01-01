@@ -52,7 +52,7 @@ class AddSoundViewController: UIViewController
                 AVSampleRateKey             : 44100.0                       as AnyObject,
                 AVEncoderAudioQualityKey    : AVAudioQuality.min.rawValue   as AnyObject,
                 AVEncoderBitRateKey         : 65536.0                       as AnyObject
-                ])
+            ])
             audioRecorder.delegate = self
             audioRecorder.isMeteringEnabled = true
             audioRecorder.record()
@@ -132,7 +132,7 @@ fileprivate extension AddSoundViewController
     {
         if let directory = FileManager.default.urls(for: .documentDirectory , in: .userDomainMask).first {
             documentsDirectory = directory
-            return directory//.appendingPathComponent(fileName())
+            return directory
         }
         throw NSError(domain: kAddSoundViewControllerErrorDomain,
             code: 1,
