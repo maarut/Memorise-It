@@ -25,6 +25,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="HUV-HB-eZE">
                                 <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="4v5-k6-WUi">
                                     <size key="itemSize" width="100" height="100"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -55,6 +56,7 @@
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="cZ7-JA-nwG"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="72h-4r-iYY"/>
+                                    <outletCollection property="gestureRecognizers" destination="m5r-Dl-uMH" appends="YES" id="gDD-S6-8A8"/>
                                 </connections>
                             </collectionView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w8B-I9-XPl">
@@ -80,6 +82,7 @@
                             </navigationBar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="HUV-HB-eZE" firstAttribute="top" secondItem="5dr-9S-mkQ" secondAttribute="bottom" id="HZZ-UM-rB3"/>
                             <constraint firstAttribute="trailing" secondItem="5dr-9S-mkQ" secondAttribute="trailing" id="IhT-Gf-A1W"/>
@@ -107,6 +110,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="m5r-Dl-uMH">
+                    <connections>
+                        <action selector="longPressRecognised:" destination="BYZ-38-t0r" id="GOI-bl-uIq"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="981.60000000000002" y="777.66116941529242"/>
         </scene>

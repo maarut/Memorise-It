@@ -20,17 +20,20 @@ class ImageCollectionViewController: UIViewController
     fileprivate let imagePickerController = UIImagePickerController()
     fileprivate var allFlashCards: NSFetchedResultsController<FlashCard>!
     fileprivate var selectedCell: IndexPath?
-    fileprivate weak var detailViewController: UIViewController?
     fileprivate var changes = [NSFetchedResultsChangeType : [IndexPath]]()
+    fileprivate weak var detailViewController: UIViewController?
+    fileprivate var selectedCells = Set<IndexPath>()
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         imagePickerController.delegate = self
         imagePickerController.sourceType = .photoLibrary
-        customNavBar.topItem?.leftBarButtonItem = editButtonItem
         allFlashCards = dataController.allFlashCards()
         allFlashCards.delegate = self
+        if let topItem = customNavBar.topItem {
+            topItem.setRightBarButtonItems([editButtonItem, topItem.rightBarButtonItem!], animated: false)
+        }
         do { try allFlashCards.performFetch() }
         catch let error as NSError { NSLog("\(error)\n\(error.localizedDescription)") }
     }
@@ -40,10 +43,37 @@ class ImageCollectionViewController: UIViewController
         present(nextVCOnAddButtonTap(), animated: true, completion: nil)
     }
     
+    @IBAction func editButtonTapped(_ sender: UIBarButtonItem)
+    {
+        setEditing(true, animated: true)
+    }
+    
+    @IBAction func longPressRecognised(_ sender: UILongPressGestureRecognizer)
+    {
+        switch sender.state {
+        case .ended:    setEditing(true, animated: true)
+        default:        break
+        }
+    }
+    
     override func setEditing(_ editing: Bool, animated: Bool)
     {
+        guard isEditing != editing else { return }
         super.setEditing(editing, animated: animated)
-        NSLog("Editing")
+        editing ? startEditing() : endEditing()
+    }
+}
+
+// MARK: - Dynamic Functions
+fileprivate extension ImageCollectionViewController
+{
+    dynamic func doneTapped(_ sender: UIBarButtonItem)
+    {
+        setEditing(false, animated: true)
+    }
+    
+    dynamic func deleteSelected(_ sender: UIBarButtonItem)
+    {
         
     }
 }
@@ -51,6 +81,41 @@ class ImageCollectionViewController: UIViewController
 // MARK: - Private Functions
 fileprivate extension ImageCollectionViewController
 {
+    func startEditing()
+    {
+        let title = customNavBar.topItem?.title
+        let item = UINavigationItem(title: "")
+        item.setRightBarButton(
+            editButtonItem,
+            animated: false)
+        item.setLeftBarButton(
+            UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteSelected(_:))),
+            animated: false)
+        UIView.animate(withDuration: 0.3, animations: {
+            self.customNavBar.topItem?.title = nil
+            self.customNavBar.barTintColor = UIColor.green
+            self.customNavBar.tintColor = UIColor.white
+            self.customNavBar.layoutIfNeeded()
+        }, completion: { _ in
+            self.customNavBar.backItem?.title = title
+        })
+        customNavBar.pushItem(item, animated: true)
+    }
+    
+    func endEditing()
+    {
+        let title = customNavBar.backItem?.title
+        customNavBar.backItem?.title = nil
+        UIView.animate(withDuration: 0.3, animations: {
+            self.customNavBar.barTintColor = nil
+            self.customNavBar.tintColor = nil
+        }, completion: { _ in
+            self.customNavBar.topItem?.title = title
+        })
+        customNavBar.popItem(animated: true)
+        
+    }
+    
     func nextVCOnAddButtonTap() -> UIViewController
     {
         let sourceTypes = availableSourceTypes()
@@ -145,17 +210,13 @@ fileprivate extension ImageCollectionViewController
         return (IndexPath(row: adjacentRows.previous, section: current.section),
             IndexPath(row: adjacentRows.next, section: current.section))
     }
-}
-
-// MARK: - UICollectionViewDelegate Implementation
-extension ImageCollectionViewController: UICollectionViewDelegate
-{
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
+    
+    func expandItem(at indexPath: IndexPath)
     {
         guard let cell = collectionView.cellForItem(at: indexPath),
             let detailVC = storyboard?.instantiateViewController(
                 withIdentifier: "flashCardDetailViewController") as? PlayFlashCardViewController else {
-            return
+                    return
         }
         selectedCell = indexPath
         detailVC.delegate = self
@@ -168,6 +229,20 @@ extension ImageCollectionViewController: UICollectionViewDelegate
         detailVC.didMove(toParentViewController: self)
         detailViewController = detailVC
         cell.contentView.isHidden = true
+    }
+    
+    func selectItem(at indexPath: IndexPath)
+    {
+        
+    }
+}
+
+// MARK: - UICollectionViewDelegate Implementation
+extension ImageCollectionViewController: UICollectionViewDelegate
+{
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
+    {
+        isEditing ? expandItem(at: indexPath) : selectItem(at: indexPath)
     }
     
 }

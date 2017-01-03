@@ -43,15 +43,22 @@ class PlayFlashCardViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        if let flashCard = delegate?.flashCard(for: .current),
-            let imageData = flashCard.image as Data? {
-            let iv = UIImageView(image: UIImage(data: imageData))
-            iv.translatesAutoresizingMaskIntoConstraints = false
-            iv.contentMode = .scaleAspectFit
-            view.addSubview(iv)
-            imageView = iv
-        }
         informationOverlayContainer.layer.cornerRadius = 10
+    }
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        
+        guard let flashCard = delegate?.flashCard(for: .current),
+            let imageData = flashCard.image as Data? else {
+            return
+        }
+        let iv = UIImageView(image: UIImage(data: imageData))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFit
+        view.addSubview(iv)
+        imageView = iv
     }
     
     override func viewDidAppear(_ animated: Bool)
