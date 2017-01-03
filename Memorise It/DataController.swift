@@ -92,6 +92,14 @@ class DataController
             }
         }
     }
+    
+    func delete(_ flashCard: FlashCard)
+    {
+        mainThreadContext.perform {
+            self.mainThreadContext.delete(flashCard)
+            self.save()
+        }
+    }
 }
 
 private func log(error: NSError, abort: Bool)

@@ -74,7 +74,12 @@ fileprivate extension ImageCollectionViewController
     
     dynamic func deleteSelected(_ sender: UIBarButtonItem)
     {
-        
+        for ip in selectedCells {
+            if let flashCard = allFlashCards.fetchedObjects?[ip.row] {
+                dataController.delete(flashCard)
+            }
+        }
+        selectedCells = []
     }
 }
 
@@ -112,6 +117,11 @@ fileprivate extension ImageCollectionViewController
         }, completion: { _ in
             self.customNavBar.topItem?.title = title
         })
+        for ip in selectedCells {
+            let cell = collectionView.cellForItem(at: ip)!
+            cell.layer.borderWidth = 0.0
+        }
+        selectedCells = []
         customNavBar.popItem(animated: true)
         
     }
@@ -233,7 +243,15 @@ fileprivate extension ImageCollectionViewController
     
     func selectItem(at indexPath: IndexPath)
     {
-        
+        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+        if selectedCells.contains(indexPath) {
+            selectedCells.remove(indexPath)
+            cell.layer.borderWidth = 0.0
+        }
+        else {
+            selectedCells.insert(indexPath)
+            cell.layer.borderWidth = 2.0
+        }
     }
 }
 
@@ -242,7 +260,7 @@ extension ImageCollectionViewController: UICollectionViewDelegate
 {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
-        isEditing ? expandItem(at: indexPath) : selectItem(at: indexPath)
+        isEditing ? selectItem(at: indexPath) : expandItem(at: indexPath)
     }
     
 }
@@ -262,6 +280,7 @@ extension ImageCollectionViewController: UICollectionViewDataSource
             let imageData = allFlashCards.fetchedObjects?[indexPath.row].image {
             imageView.image = UIImage(data: imageData as Data)
         }
+        view.layer.borderColor = UIColor.green.cgColor
         return view
     }
 }
