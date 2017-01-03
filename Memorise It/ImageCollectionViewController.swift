@@ -74,11 +74,8 @@ fileprivate extension ImageCollectionViewController
     
     dynamic func deleteSelected(_ sender: UIBarButtonItem)
     {
-        for ip in selectedCells {
-            if let flashCard = allFlashCards.fetchedObjects?[ip.row] {
-                dataController.delete(flashCard)
-            }
-        }
+        let flashCards = selectedCells.flatMap { allFlashCards.fetchedObjects?[$0.row] }
+        dataController.delete(flashCards)
         selectedCells = []
     }
 }

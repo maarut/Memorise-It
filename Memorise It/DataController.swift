@@ -93,10 +93,10 @@ class DataController
         }
     }
     
-    func delete(_ flashCard: FlashCard)
+    func delete(_ flashCards: [FlashCard])
     {
         mainThreadContext.perform {
-            self.mainThreadContext.delete(flashCard)
+            for f in flashCards { self.mainThreadContext.delete(f) }
             self.save()
         }
     }
