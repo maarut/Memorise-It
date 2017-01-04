@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1212" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -62,7 +62,11 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w8B-I9-XPl">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
-                                    <barButtonItem title="Play" id="1eh-BL-U0p"/>
+                                    <barButtonItem title="Play" id="1eh-BL-U0p">
+                                        <connections>
+                                            <action selector="playTapped:" destination="BYZ-38-t0r" id="b4c-Si-zcz"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5dr-9S-mkQ">
@@ -228,6 +232,78 @@ the audio associated with it.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BCl-Ix-h6C" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="982" y="1532"/>
+        </scene>
+        <!--Continuous Play View Controller-->
+        <scene sceneID="Rwk-9k-AUe">
+            <objects>
+                <viewController storyboardIdentifier="continuousPlayViewController" id="tDl-BC-ryc" customClass="ContinuousPlayViewController" customModule="Memorise_It" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Pej-Lj-NKU"/>
+                        <viewControllerLayoutGuide type="bottom" id="bl6-7B-BNb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="eFC-LN-h51">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button hidden="YES" opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wbk-oH-R45">
+                                <rect key="frame" x="20" y="28" width="30" height="30"/>
+                                <state key="normal" title="╳">
+                                    <color key="titleColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
+                                </state>
+                                <connections>
+                                    <action selector="dismissTapped:" destination="tDl-BC-ryc" eventType="touchUpInside" id="jhB-uG-Pms"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5J1-eD-AQZ">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QyS-nm-DXe">
+                                <rect key="frame" x="375" y="20" width="375" height="647"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Stc-gO-1Ru">
+                                <rect key="frame" x="375" y="20" width="44" height="647"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="N8D-Lu-kUT"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="5J1-eD-AQZ" secondAttribute="trailing" id="1Pk-R4-HDf"/>
+                            <constraint firstItem="Stc-gO-1Ru" firstAttribute="height" secondItem="5J1-eD-AQZ" secondAttribute="height" id="1g0-YT-aaF"/>
+                            <constraint firstItem="5J1-eD-AQZ" firstAttribute="leading" secondItem="eFC-LN-h51" secondAttribute="leading" id="B2W-iq-IxB"/>
+                            <constraint firstItem="Stc-gO-1Ru" firstAttribute="top" secondItem="QyS-nm-DXe" secondAttribute="top" id="BEE-nT-rfF"/>
+                            <constraint firstItem="bl6-7B-BNb" firstAttribute="top" secondItem="5J1-eD-AQZ" secondAttribute="bottom" id="IZm-dW-Wmx"/>
+                            <constraint firstItem="Wbk-oH-R45" firstAttribute="top" secondItem="Pej-Lj-NKU" secondAttribute="bottom" constant="8" symbolic="YES" id="IxG-Ht-Dr7"/>
+                            <constraint firstItem="Wbk-oH-R45" firstAttribute="leading" secondItem="eFC-LN-h51" secondAttribute="leading" constant="20" symbolic="YES" id="MzU-8U-4kU"/>
+                            <constraint firstItem="Stc-gO-1Ru" firstAttribute="leading" secondItem="QyS-nm-DXe" secondAttribute="leading" id="OcT-0C-IoR"/>
+                            <constraint firstItem="QyS-nm-DXe" firstAttribute="top" secondItem="5J1-eD-AQZ" secondAttribute="top" id="h19-2I-AMB"/>
+                            <constraint firstItem="QyS-nm-DXe" firstAttribute="leading" secondItem="5J1-eD-AQZ" secondAttribute="trailing" id="okb-Z9-lk2"/>
+                            <constraint firstItem="QyS-nm-DXe" firstAttribute="width" secondItem="5J1-eD-AQZ" secondAttribute="width" id="thu-bE-rwY"/>
+                            <constraint firstItem="QyS-nm-DXe" firstAttribute="height" secondItem="5J1-eD-AQZ" secondAttribute="height" id="tut-LW-vwo"/>
+                            <constraint firstItem="5J1-eD-AQZ" firstAttribute="top" secondItem="Pej-Lj-NKU" secondAttribute="bottom" id="yVc-cU-Xo4"/>
+                        </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="rx2-XV-MpI" appends="YES" id="PSK-Yl-TN5"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="coverPanel" destination="Stc-gO-1Ru" id="s6l-VQ-KzN"/>
+                        <outlet property="dismissButton" destination="Wbk-oH-R45" id="bg4-K0-SsV"/>
+                        <outlet property="nextImageView" destination="QyS-nm-DXe" id="uXu-O4-PIR"/>
+                        <outlet property="visibleImageView" destination="5J1-eD-AQZ" id="Mb4-GK-kiO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gg6-uF-wTd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="rx2-XV-MpI">
+                    <connections>
+                        <action selector="tapRecognised:" destination="tDl-BC-ryc" id="wPd-g4-Sek"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="1924" y="1531"/>
         </scene>
     </scenes>
 </document>

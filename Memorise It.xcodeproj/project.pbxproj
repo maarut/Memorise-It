@@ -10,6 +10,7 @@
 		E34F70161DF9DFD40074F8F1 /* PlayFlashCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34F70151DF9DFD40074F8F1 /* PlayFlashCardViewController.swift */; };
 		E34F701D1DFEEA1D0074F8F1 /* FlashCards.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E34F701B1DFEEA1D0074F8F1 /* FlashCards.xcdatamodeld */; };
 		E34F701F1DFEEC920074F8F1 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34F701E1DFEEC920074F8F1 /* DataController.swift */; };
+		E36AD3B71E1C1CF000A2C74A /* ContinuousPlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36AD3B61E1C1CF000A2C74A /* ContinuousPlayViewController.swift */; };
 		E3B847FC1DF1DEA300FD259F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B847FB1DF1DEA300FD259F /* AppDelegate.swift */; };
 		E3B847FE1DF1DEA300FD259F /* ImageCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B847FD1DF1DEA300FD259F /* ImageCollectionViewController.swift */; };
 		E3B848011DF1DEA300FD259F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3B847FF1DF1DEA300FD259F /* Main.storyboard */; };
@@ -22,6 +23,7 @@
 		E34F70151DF9DFD40074F8F1 /* PlayFlashCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayFlashCardViewController.swift; sourceTree = "<group>"; };
 		E34F701C1DFEEA1D0074F8F1 /* FlashCards.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FlashCards.xcdatamodel; sourceTree = "<group>"; };
 		E34F701E1DFEEC920074F8F1 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		E36AD3B61E1C1CF000A2C74A /* ContinuousPlayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinuousPlayViewController.swift; sourceTree = "<group>"; };
 		E3B847F81DF1DEA300FD259F /* Memorise It.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Memorise It.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3B847FB1DF1DEA300FD259F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E3B847FD1DF1DEA300FD259F /* ImageCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewController.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				E3B847FD1DF1DEA300FD259F /* ImageCollectionViewController.swift */,
 				E3B8480D1DF7442E00FD259F /* AddSoundViewController.swift */,
 				E34F70151DF9DFD40074F8F1 /* PlayFlashCardViewController.swift */,
+				E36AD3B61E1C1CF000A2C74A /* ContinuousPlayViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -178,6 +181,7 @@
 				E3B847FE1DF1DEA300FD259F /* ImageCollectionViewController.swift in Sources */,
 				E3B847FC1DF1DEA300FD259F /* AppDelegate.swift in Sources */,
 				E3B8480E1DF7442E00FD259F /* AddSoundViewController.swift in Sources */,
+				E36AD3B71E1C1CF000A2C74A /* ContinuousPlayViewController.swift in Sources */,
 				E34F70161DF9DFD40074F8F1 /* PlayFlashCardViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

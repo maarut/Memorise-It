@@ -38,14 +38,16 @@ class ImageCollectionViewController: UIViewController
         catch let error as NSError { NSLog("\(error)\n\(error.localizedDescription)") }
     }
     
+    override func setEditing(_ editing: Bool, animated: Bool)
+    {
+        guard isEditing != editing else { return }
+        super.setEditing(editing, animated: animated)
+        editing ? startEditing() : endEditing()
+    }
+    
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem)
     {
         present(nextVCOnAddButtonTap(), animated: true, completion: nil)
-    }
-    
-    @IBAction func editButtonTapped(_ sender: UIBarButtonItem)
-    {
-        setEditing(true, animated: true)
     }
     
     @IBAction func longPressRecognised(_ sender: UILongPressGestureRecognizer)
@@ -56,17 +58,25 @@ class ImageCollectionViewController: UIViewController
         }
     }
     
-    override func setEditing(_ editing: Bool, animated: Bool)
+    @IBAction func playTapped(_ sender: UIBarButtonItem)
     {
-        guard isEditing != editing else { return }
-        super.setEditing(editing, animated: animated)
-        editing ? startEditing() : endEditing()
+        if let nextVC = storyboard?.instantiateViewController(withIdentifier: "continuousPlayViewController")
+            as? ContinuousPlayViewController {
+            nextVC.flashCards = allFlashCards.fetchedObjects ?? []
+            present(nextVC, animated: true, completion: nil)
+        }
     }
+    
 }
 
 // MARK: - Dynamic Functions
 fileprivate extension ImageCollectionViewController
 {
+    dynamic func editButtonTapped(_ sender: UIBarButtonItem)
+    {
+        setEditing(true, animated: true)
+    }
+    
     dynamic func doneTapped(_ sender: UIBarButtonItem)
     {
         setEditing(false, animated: true)

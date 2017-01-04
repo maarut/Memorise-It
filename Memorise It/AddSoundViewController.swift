@@ -39,12 +39,6 @@ class AddSoundViewController: UIViewController
             UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneSelected(_:))),
             animated: false)
         imageView.image = image
-        
-    }
-    
-    @IBAction func record(_ button: UIButton)
-    {
-        removePreviousRecording()
         do {
             audioRecorder = try AVAudioRecorder(url: filePath().appendingPathComponent(fileName()), settings: [
                 AVFormatIDKey               : kAudioFormatMPEG4AAC          as AnyObject,
@@ -52,18 +46,23 @@ class AddSoundViewController: UIViewController
                 AVSampleRateKey             : 44100.0                       as AnyObject,
                 AVEncoderAudioQualityKey    : AVAudioQuality.min.rawValue   as AnyObject,
                 AVEncoderBitRateKey         : 65536.0                       as AnyObject
-            ])
+                ])
             audioRecorder.delegate = self
             audioRecorder.isMeteringEnabled = true
-            audioRecorder.record()
-            recordButton.removeTarget(self, action: #selector(record(_:)), for: .touchUpInside)
-            recordButton.addTarget(self, action: #selector(stopRecording(_:)), for: .touchUpInside)
-            recordButton.setTitle("Stop", for: .normal)
-            playButton.isEnabled = false
         }
         catch let error as NSError {
             NSLog("\(error.description)\n\(error.localizedDescription)")
         }
+    }
+    
+    @IBAction func record(_ button: UIButton)
+    {
+        removePreviousRecording()
+        audioRecorder.record()
+        recordButton.removeTarget(self, action: #selector(record(_:)), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(stopRecording(_:)), for: .touchUpInside)
+        recordButton.setTitle("Stop", for: .normal)
+        playButton.isEnabled = false
     }
     
     @IBAction func playAudio(_ sender: UIButton)
