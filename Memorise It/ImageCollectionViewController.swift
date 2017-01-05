@@ -9,6 +9,10 @@
 import UIKit
 import MobileCoreServices
 import CoreData
+import GoogleMobileAds
+
+private let kPortraitAdViewHeight: CGFloat = 50.0
+private let kLandscapeAdViewHeight: CGFloat = 32.0
 
 class ImageCollectionViewController: UIViewController
 {
@@ -16,6 +20,8 @@ class ImageCollectionViewController: UIViewController
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addButton: UIBarButtonItem!
     @IBOutlet weak var customNavBar: UINavigationBar!
+    @IBOutlet weak var adViewToCollectionViewConstraint: NSLayoutConstraint!
+    @IBOutlet weak var adView: GADBannerView!
     
     fileprivate let imagePickerController = UIImagePickerController()
     fileprivate var allFlashCards: NSFetchedResultsController<FlashCard>!
@@ -27,6 +33,10 @@ class ImageCollectionViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        adView.delegate = self
+        adView.adUnitID = kAdMobAdUnitId
+        adView.rootViewController = self
+        adView.adSize = kGADAdSizeBanner
         imagePickerController.delegate = self
         imagePickerController.sourceType = .photoLibrary
         allFlashCards = dataController.allFlashCards()
@@ -43,6 +53,12 @@ class ImageCollectionViewController: UIViewController
         guard isEditing != editing else { return }
         super.setEditing(editing, animated: animated)
         editing ? startEditing() : endEditing()
+    }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        presentAds()
     }
     
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem)
@@ -93,6 +109,13 @@ fileprivate extension ImageCollectionViewController
 // MARK: - Private Functions
 fileprivate extension ImageCollectionViewController
 {
+    func presentAds()
+    {
+        let request = GADRequest()
+        request.testDevices = MCConstants.adMobTestDevices()
+        adView.load(request)
+    }
+    
     func startEditing()
     {
         let title = customNavBar.topItem?.title
@@ -420,5 +443,22 @@ extension ImageCollectionViewController: PlayFlashCardViewControllerDelegate
         }
         let origin = cell.convert(CGPoint.zero, to: view)
         return CGRect(origin: origin, size: cell.frame.size)
+    }
+}
+
+// MARK: - GADBannerViewDelegate Implementation
+extension ImageCollectionViewController: GADBannerViewDelegate
+{
+    func adViewDidReceiveAd(_ bannerView: GADBannerView)
+    {
+        UIView.animate(withDuration: 0.3) {
+            self.adViewToCollectionViewConstraint.constant = 0
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError)
+    {
+        NSLog("\(error.description)\n\(error.localizedDescription)")
     }
 }

@@ -22,6 +22,35 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DmR-7L-ghf" customClass="GADBannerView">
+                                <rect key="frame" x="0.0" y="573" width="375" height="50"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Whr-Yu-B58"/>
+                                    <constraint firstAttribute="height" constant="32" id="Xmo-aZ-Egx"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Whr-Yu-B58"/>
+                                        <exclude reference="Xmo-aZ-Egx"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="Xmo-aZ-Egx"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="Xmo-aZ-Egx"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="Whr-Yu-B58"/>
+                                    </mask>
+                                </variation>
+                            </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="HUV-HB-eZE">
                                 <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -88,16 +117,19 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="DmR-7L-ghf" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="1sv-2y-Lcs"/>
                             <constraint firstItem="HUV-HB-eZE" firstAttribute="top" secondItem="5dr-9S-mkQ" secondAttribute="bottom" id="HZZ-UM-rB3"/>
                             <constraint firstAttribute="trailing" secondItem="5dr-9S-mkQ" secondAttribute="trailing" id="IhT-Gf-A1W"/>
+                            <constraint firstItem="DmR-7L-ghf" firstAttribute="top" secondItem="HUV-HB-eZE" secondAttribute="bottom" constant="-50" id="Nta-Jj-hWB"/>
                             <constraint firstItem="5dr-9S-mkQ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Q0u-Bp-GS9"/>
-                            <constraint firstItem="w8B-I9-XPl" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="UJL-5Q-Dfj"/>
+                            <constraint firstItem="w8B-I9-XPl" firstAttribute="top" secondItem="DmR-7L-ghf" secondAttribute="bottom" id="ReY-mK-pVc"/>
                             <constraint firstItem="HUV-HB-eZE" firstAttribute="trailing" secondItem="w8B-I9-XPl" secondAttribute="trailing" id="ZYx-XV-HvV"/>
                             <constraint firstItem="HUV-HB-eZE" firstAttribute="leading" secondItem="w8B-I9-XPl" secondAttribute="leading" id="qfu-P0-Kg3"/>
                             <constraint firstItem="5dr-9S-mkQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="rRs-us-YiL"/>
                             <constraint firstItem="5dr-9S-mkQ" firstAttribute="leading" secondItem="HUV-HB-eZE" secondAttribute="leading" id="rgE-sV-85u"/>
+                            <constraint firstAttribute="trailing" secondItem="DmR-7L-ghf" secondAttribute="trailing" id="typ-mT-X1V"/>
                             <constraint firstItem="5dr-9S-mkQ" firstAttribute="trailing" secondItem="HUV-HB-eZE" secondAttribute="trailing" id="uH0-3m-liy"/>
-                            <constraint firstItem="w8B-I9-XPl" firstAttribute="top" secondItem="HUV-HB-eZE" secondAttribute="bottom" id="vrb-cx-DOc"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="w8B-I9-XPl" secondAttribute="bottom" id="uK7-gn-TwV"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="bde-9p-2pm">
@@ -108,6 +140,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="adView" destination="DmR-7L-ghf" id="pnP-hF-4ZO"/>
+                        <outlet property="adViewToCollectionViewConstraint" destination="Nta-Jj-hWB" id="cI9-D6-alE"/>
                         <outlet property="addButton" destination="9xi-xY-o2x" id="qZY-AV-MbJ"/>
                         <outlet property="collectionView" destination="HUV-HB-eZE" id="EQV-ma-P7o"/>
                         <outlet property="customNavBar" destination="5dr-9S-mkQ" id="qzX-fx-84n"/>

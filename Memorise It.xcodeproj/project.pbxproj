@@ -11,6 +11,17 @@
 		E34F701D1DFEEA1D0074F8F1 /* FlashCards.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E34F701B1DFEEA1D0074F8F1 /* FlashCards.xcdatamodeld */; };
 		E34F701F1DFEEC920074F8F1 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34F701E1DFEEC920074F8F1 /* DataController.swift */; };
 		E36AD3B71E1C1CF000A2C74A /* ContinuousPlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36AD3B61E1C1CF000A2C74A /* ContinuousPlayViewController.swift */; };
+		E36AD3C01E1ECFD500A2C74A /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36AD3B91E1ECFD500A2C74A /* FirebaseAnalytics.framework */; };
+		E36AD3C11E1ECFD500A2C74A /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36AD3BA1E1ECFD500A2C74A /* FirebaseCore.framework */; };
+		E36AD3C21E1ECFD500A2C74A /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36AD3BB1E1ECFD500A2C74A /* FirebaseInstanceID.framework */; };
+		E36AD3C31E1ECFD500A2C74A /* GoogleInterchangeUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36AD3BC1E1ECFD500A2C74A /* GoogleInterchangeUtilities.framework */; };
+		E36AD3C41E1ECFD500A2C74A /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36AD3BD1E1ECFD500A2C74A /* GoogleMobileAds.framework */; };
+		E36AD3C51E1ECFD500A2C74A /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36AD3BE1E1ECFD500A2C74A /* GoogleSymbolUtilities.framework */; };
+		E36AD3C61E1ECFD500A2C74A /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36AD3BF1E1ECFD500A2C74A /* GoogleToolboxForMac.framework */; };
+		E36AD3CB1E1ED26400A2C74A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E36AD3CA1E1ED26400A2C74A /* libsqlite3.tbd */; };
+		E36AD3CD1E1ED27800A2C74A /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E36AD3CC1E1ED27800A2C74A /* libz.tbd */; };
+		E36AD3CF1E1ED28600A2C74A /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E36AD3CE1E1ED28600A2C74A /* libstdc++.tbd */; };
+		E36AD3D51E1EDC7600A2C74A /* MCConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = E36AD3D41E1EDC7600A2C74A /* MCConstants.m */; };
 		E3B847FC1DF1DEA300FD259F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B847FB1DF1DEA300FD259F /* AppDelegate.swift */; };
 		E3B847FE1DF1DEA300FD259F /* ImageCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B847FD1DF1DEA300FD259F /* ImageCollectionViewController.swift */; };
 		E3B848011DF1DEA300FD259F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3B847FF1DF1DEA300FD259F /* Main.storyboard */; };
@@ -24,6 +35,22 @@
 		E34F701C1DFEEA1D0074F8F1 /* FlashCards.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FlashCards.xcdatamodel; sourceTree = "<group>"; };
 		E34F701E1DFEEC920074F8F1 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		E36AD3B61E1C1CF000A2C74A /* ContinuousPlayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinuousPlayViewController.swift; sourceTree = "<group>"; };
+		E36AD3B91E1ECFD500A2C74A /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAnalytics.framework; path = Frameworks/FirebaseAnalytics.framework; sourceTree = "<group>"; };
+		E36AD3BA1E1ECFD500A2C74A /* FirebaseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseCore.framework; path = Frameworks/FirebaseCore.framework; sourceTree = "<group>"; };
+		E36AD3BB1E1ECFD500A2C74A /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseInstanceID.framework; path = Frameworks/FirebaseInstanceID.framework; sourceTree = "<group>"; };
+		E36AD3BC1E1ECFD500A2C74A /* GoogleInterchangeUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleInterchangeUtilities.framework; path = Frameworks/GoogleInterchangeUtilities.framework; sourceTree = "<group>"; };
+		E36AD3BD1E1ECFD500A2C74A /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = Frameworks/GoogleMobileAds.framework; sourceTree = "<group>"; };
+		E36AD3BE1E1ECFD500A2C74A /* GoogleSymbolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSymbolUtilities.framework; path = Frameworks/GoogleSymbolUtilities.framework; sourceTree = "<group>"; };
+		E36AD3BF1E1ECFD500A2C74A /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleToolboxForMac.framework; path = Frameworks/GoogleToolboxForMac.framework; sourceTree = "<group>"; };
+		E36AD3C81E1ED19D00A2C74A /* Firebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Firebase.h; path = Frameworks/Firebase.h; sourceTree = "<group>"; };
+		E36AD3C91E1ED21800A2C74A /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = Frameworks/module.modulemap; sourceTree = "<group>"; };
+		E36AD3CA1E1ED26400A2C74A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		E36AD3CC1E1ED27800A2C74A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		E36AD3CE1E1ED28600A2C74A /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		E36AD3D11E1EDA7100A2C74A /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		E36AD3D21E1EDC7600A2C74A /* Memorise It-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Memorise It-Bridging-Header.h"; sourceTree = "<group>"; };
+		E36AD3D31E1EDC7600A2C74A /* MCConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCConstants.h; sourceTree = "<group>"; };
+		E36AD3D41E1EDC7600A2C74A /* MCConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCConstants.m; sourceTree = "<group>"; };
 		E3B847F81DF1DEA300FD259F /* Memorise It.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Memorise It.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3B847FB1DF1DEA300FD259F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E3B847FD1DF1DEA300FD259F /* ImageCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewController.swift; sourceTree = "<group>"; };
@@ -39,6 +66,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E36AD3CF1E1ED28600A2C74A /* libstdc++.tbd in Frameworks */,
+				E36AD3CD1E1ED27800A2C74A /* libz.tbd in Frameworks */,
+				E36AD3CB1E1ED26400A2C74A /* libsqlite3.tbd in Frameworks */,
+				E36AD3C61E1ECFD500A2C74A /* GoogleToolboxForMac.framework in Frameworks */,
+				E36AD3C51E1ECFD500A2C74A /* GoogleSymbolUtilities.framework in Frameworks */,
+				E36AD3C11E1ECFD500A2C74A /* FirebaseCore.framework in Frameworks */,
+				E36AD3C31E1ECFD500A2C74A /* GoogleInterchangeUtilities.framework in Frameworks */,
+				E36AD3C41E1ECFD500A2C74A /* GoogleMobileAds.framework in Frameworks */,
+				E36AD3C21E1ECFD500A2C74A /* FirebaseInstanceID.framework in Frameworks */,
+				E36AD3C01E1ECFD500A2C74A /* FirebaseAnalytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,11 +91,42 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		E36AD3B81E1ECF4B00A2C74A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E36AD3CE1E1ED28600A2C74A /* libstdc++.tbd */,
+				E36AD3CC1E1ED27800A2C74A /* libz.tbd */,
+				E36AD3CA1E1ED26400A2C74A /* libsqlite3.tbd */,
+				E36AD3C91E1ED21800A2C74A /* module.modulemap */,
+				E36AD3C81E1ED19D00A2C74A /* Firebase.h */,
+				E36AD3B91E1ECFD500A2C74A /* FirebaseAnalytics.framework */,
+				E36AD3BA1E1ECFD500A2C74A /* FirebaseCore.framework */,
+				E36AD3BB1E1ECFD500A2C74A /* FirebaseInstanceID.framework */,
+				E36AD3BC1E1ECFD500A2C74A /* GoogleInterchangeUtilities.framework */,
+				E36AD3BD1E1ECFD500A2C74A /* GoogleMobileAds.framework */,
+				E36AD3BE1E1ECFD500A2C74A /* GoogleSymbolUtilities.framework */,
+				E36AD3BF1E1ECFD500A2C74A /* GoogleToolboxForMac.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E36AD3D01E1EDA4F00A2C74A /* Environments */ = {
+			isa = PBXGroup;
+			children = (
+				E36AD3D11E1EDA7100A2C74A /* Config.xcconfig */,
+				E36AD3D31E1EDC7600A2C74A /* MCConstants.h */,
+				E36AD3D41E1EDC7600A2C74A /* MCConstants.m */,
+				E36AD3D21E1EDC7600A2C74A /* Memorise It-Bridging-Header.h */,
+			);
+			name = Environments;
+			sourceTree = "<group>";
+		};
 		E3B847EF1DF1DEA300FD259F = {
 			isa = PBXGroup;
 			children = (
 				E3B847FA1DF1DEA300FD259F /* Memorise It */,
 				E3B847F91DF1DEA300FD259F /* Products */,
+				E36AD3B81E1ECF4B00A2C74A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -73,6 +141,7 @@
 		E3B847FA1DF1DEA300FD259F /* Memorise It */ = {
 			isa = PBXGroup;
 			children = (
+				E36AD3D01E1EDA4F00A2C74A /* Environments */,
 				E3B848101DF7443E00FD259F /* Storyboards */,
 				E34F70171DF9E0030074F8F1 /* Model */,
 				E3B8480F1DF7443400FD259F /* View Controllers */,
@@ -136,6 +205,7 @@
 					E3B847F71DF1DEA300FD259F = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = F53K8XZ6AA;
+						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -181,6 +251,7 @@
 				E3B847FE1DF1DEA300FD259F /* ImageCollectionViewController.swift in Sources */,
 				E3B847FC1DF1DEA300FD259F /* AppDelegate.swift in Sources */,
 				E3B8480E1DF7442E00FD259F /* AddSoundViewController.swift in Sources */,
+				E36AD3D51E1EDC7600A2C74A /* MCConstants.m in Sources */,
 				E36AD3B71E1C1CF000A2C74A /* ContinuousPlayViewController.swift in Sources */,
 				E34F70161DF9DFD40074F8F1 /* PlayFlashCardViewController.swift in Sources */,
 			);
@@ -210,8 +281,9 @@
 /* Begin XCBuildConfiguration section */
 		E3B848081DF1DEA300FD259F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E36AD3D11E1EDA7100A2C74A /* Config.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -252,6 +324,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -261,8 +334,9 @@
 		};
 		E3B848091DF1DEA300FD259F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E36AD3D11E1EDA7100A2C74A /* Config.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -296,6 +370,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -305,28 +380,43 @@
 		};
 		E3B8480B1DF1DEA300FD259F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E36AD3D11E1EDA7100A2C74A /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = F53K8XZ6AA;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				INFOPLIST_FILE = "Memorise It/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.maarut.Memorise-It";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Memorise It/Memorise It-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		E3B8480C1DF1DEA300FD259F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E36AD3D11E1EDA7100A2C74A /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = F53K8XZ6AA;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				INFOPLIST_FILE = "Memorise It/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.maarut.Memorise-It";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Memorise It/Memorise It-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

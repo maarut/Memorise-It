@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate
@@ -21,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         dataController = DataController(withModelName: "FlashCards")
         let rootVC = window?.rootViewController as? ImageCollectionViewController
         rootVC?.dataController = dataController
+        GADMobileAds.configure(withApplicationID: kAdMobAppId)
         pruneDocumentsDirectory()
         return true
     }
