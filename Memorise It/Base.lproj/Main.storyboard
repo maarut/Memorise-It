@@ -280,7 +280,8 @@ the audio associated with it.</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button hidden="YES" opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wbk-oH-R45">
-                                <rect key="frame" x="20" y="28" width="30" height="30"/>
+                                <rect key="frame" x="8" y="20" width="30" height="30"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="╳">
                                     <color key="titleColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
                                 </state>
@@ -310,8 +311,8 @@ the audio associated with it.</string>
                             <constraint firstItem="5J1-eD-AQZ" firstAttribute="leading" secondItem="eFC-LN-h51" secondAttribute="leading" id="B2W-iq-IxB"/>
                             <constraint firstItem="Stc-gO-1Ru" firstAttribute="top" secondItem="QyS-nm-DXe" secondAttribute="top" id="BEE-nT-rfF"/>
                             <constraint firstItem="bl6-7B-BNb" firstAttribute="top" secondItem="5J1-eD-AQZ" secondAttribute="bottom" id="IZm-dW-Wmx"/>
-                            <constraint firstItem="Wbk-oH-R45" firstAttribute="top" secondItem="Pej-Lj-NKU" secondAttribute="bottom" constant="8" symbolic="YES" id="IxG-Ht-Dr7"/>
-                            <constraint firstItem="Wbk-oH-R45" firstAttribute="leading" secondItem="eFC-LN-h51" secondAttribute="leading" constant="20" symbolic="YES" id="MzU-8U-4kU"/>
+                            <constraint firstItem="Wbk-oH-R45" firstAttribute="top" secondItem="Pej-Lj-NKU" secondAttribute="bottom" id="IxG-Ht-Dr7"/>
+                            <constraint firstItem="Wbk-oH-R45" firstAttribute="leading" secondItem="eFC-LN-h51" secondAttribute="leading" constant="8" id="MzU-8U-4kU"/>
                             <constraint firstItem="Stc-gO-1Ru" firstAttribute="leading" secondItem="QyS-nm-DXe" secondAttribute="leading" id="OcT-0C-IoR"/>
                             <constraint firstItem="QyS-nm-DXe" firstAttribute="top" secondItem="5J1-eD-AQZ" secondAttribute="top" id="h19-2I-AMB"/>
                             <constraint firstItem="QyS-nm-DXe" firstAttribute="leading" secondItem="5J1-eD-AQZ" secondAttribute="trailing" id="okb-Z9-lk2"/>

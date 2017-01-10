@@ -135,6 +135,7 @@ fileprivate extension ImageCollectionViewController
             self.customNavBar.backItem?.title = title
         })
         customNavBar.pushItem(item, animated: true)
+        for cell in collectionView.visibleCells { cell.wobble() }
     }
     
     func endEditing()
@@ -153,6 +154,7 @@ fileprivate extension ImageCollectionViewController
         }
         selectedCells = []
         customNavBar.popItem(animated: true)
+        for cell in collectionView.visibleCells { cell.endWobble() }
         
     }
     
@@ -311,6 +313,7 @@ extension ImageCollectionViewController: UICollectionViewDataSource
             imageView.image = UIImage(data: imageData as Data)
         }
         view.layer.borderColor = UIColor.green.cgColor
+        if self.isEditing { view.wobble() }
         return view
     }
 }
@@ -336,10 +339,7 @@ extension ImageCollectionViewController: UIImagePickerControllerDelegate
 }
 
 // MARK: - UINavigationControllerDelegate Implementation
-extension ImageCollectionViewController: UINavigationControllerDelegate
-{
-    
-}
+extension ImageCollectionViewController: UINavigationControllerDelegate { }
 
 // MARK: - NSFetchResultsControllerDelegate Implementation
 extension ImageCollectionViewController: NSFetchedResultsControllerDelegate
@@ -460,5 +460,50 @@ extension ImageCollectionViewController: GADBannerViewDelegate
     func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError)
     {
         NSLog("\(error.description)\n\(error.localizedDescription)")
+    }
+}
+
+// MARK: - Private Functions on UICollectionViewCell
+// Code found from http://stackoverflow.com/a/15842191/7140876. Some values adjusted to get a better animation.
+fileprivate extension UICollectionViewCell
+{
+    func endWobble()
+    {
+        UIView.animate(withDuration: 0.1) { self.layer.removeAllAnimations() }
+    }
+    
+    func wobble()
+    {
+        UIView.animate(withDuration: 0.2) {
+            self.layer.add(self.rotationAnimation(), forKey: "rotation")
+            self.layer.add(self.bounceAnimation(), forKey: "bounce")
+        }
+        
+    }
+    
+    func rotationAnimation() -> CAAnimation
+    {
+        let animation = CAKeyframeAnimation(keyPath: "transform.rotation.z")
+        animation.values = [0.03, -0.03]
+        animation.autoreverses = true
+        animation.duration = animationDuration(startPoint: 0.125, variance: 0.025)
+        animation.repeatCount = Float.greatestFiniteMagnitude
+        return animation
+    }
+    
+    func bounceAnimation() -> CAAnimation
+    {
+        let animation = CAKeyframeAnimation(keyPath: "transform.translation.y")
+        animation.values = [0.75, -0.75]
+        animation.autoreverses = true
+        animation.duration = animationDuration(startPoint: 0.125, variance: 0.025)
+        animation.repeatCount = Float.greatestFiniteMagnitude
+        return animation
+    }
+    
+    func animationDuration(startPoint: CFTimeInterval, variance: CFTimeInterval) -> CFTimeInterval
+    {
+        let random = CFTimeInterval(Int(arc4random_uniform(1000)) - 500) / 500.0
+        return startPoint + variance * random
     }
 }
