@@ -30,6 +30,11 @@ class ImageCollectionViewController: UIViewController
     fileprivate weak var detailViewController: UIViewController?
     fileprivate var selectedCells = Set<IndexPath>()
     
+    deinit
+    {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -41,6 +46,8 @@ class ImageCollectionViewController: UIViewController
         imagePickerController.sourceType = .photoLibrary
         allFlashCards = dataController.allFlashCards()
         allFlashCards.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive(_:)),
+            name: kMemoriseItDidBecomeActiveNotification, object: nil)
         if let topItem = customNavBar.topItem {
             topItem.setRightBarButtonItems([editButtonItem, topItem.rightBarButtonItem!], animated: false)
         }
@@ -88,6 +95,17 @@ class ImageCollectionViewController: UIViewController
 // MARK: - Dynamic Functions
 fileprivate extension ImageCollectionViewController
 {
+    dynamic func applicationDidBecomeActive(_ notification: Notification)
+    {
+        let selector = isEditing ?
+            #selector(UICollectionViewCell.startWobbling) :
+            #selector(UICollectionViewCell.endWobble)
+        DispatchQueue.main.async { [weak self] in
+            guard let visibleCells = self?.collectionView.visibleCells else { return }
+            for cell in visibleCells { cell.perform(selector) }
+        }
+    }
+    
     dynamic func editButtonTapped(_ sender: UIBarButtonItem)
     {
         setEditing(true, animated: true)
@@ -135,7 +153,7 @@ fileprivate extension ImageCollectionViewController
             self.customNavBar.backItem?.title = title
         })
         customNavBar.pushItem(item, animated: true)
-        for cell in collectionView.visibleCells { cell.wobble() }
+        for cell in collectionView.visibleCells { cell.startWobbling() }
     }
     
     func endEditing()
@@ -295,6 +313,18 @@ extension ImageCollectionViewController: UICollectionViewDelegate
         isEditing ? selectItem(at: indexPath) : expandItem(at: indexPath)
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
+        forItemAt indexPath: IndexPath)
+    {
+        if isEditing { cell.startWobbling() }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
+        forItemAt indexPath: IndexPath)
+    {
+        cell.endWobble()
+    }
+    
 }
 
 // MARK: - UICollectionViewDataSource Implementation
@@ -313,7 +343,7 @@ extension ImageCollectionViewController: UICollectionViewDataSource
             imageView.image = UIImage(data: imageData as Data)
         }
         view.layer.borderColor = UIColor.green.cgColor
-        if self.isEditing { view.wobble() }
+        if isEditing { view.startWobbling() }
         return view
     }
 }
@@ -467,43 +497,51 @@ extension ImageCollectionViewController: GADBannerViewDelegate
 // Code found from http://stackoverflow.com/a/15842191/7140876. Some values adjusted to get a better animation.
 fileprivate extension UICollectionViewCell
 {
-    func endWobble()
+    dynamic func endWobble()
     {
-        UIView.animate(withDuration: 0.1) { self.layer.removeAllAnimations() }
+        layer.removeAllAnimations()
     }
     
-    func wobble()
+    dynamic func startWobbling()
     {
-        UIView.animate(withDuration: 0.2) {
-            self.layer.add(self.rotationAnimation(), forKey: "rotation")
-            self.layer.add(self.bounceAnimation(), forKey: "bounce")
-        }
-        
+        layer.add(rotationAnimation(), forKey: "rotation")
+        layer.add(bounceAnimation(), forKey: "bounce")
+        layer.add(translationAnimation(), forKey: "translation")
     }
-    
-    func rotationAnimation() -> CAAnimation
-    {
-        let animation = CAKeyframeAnimation(keyPath: "transform.rotation.z")
-        animation.values = [0.03, -0.03]
-        animation.autoreverses = true
-        animation.duration = animationDuration(startPoint: 0.125, variance: 0.025)
-        animation.repeatCount = Float.greatestFiniteMagnitude
-        return animation
-    }
-    
-    func bounceAnimation() -> CAAnimation
-    {
-        let animation = CAKeyframeAnimation(keyPath: "transform.translation.y")
-        animation.values = [0.75, -0.75]
-        animation.autoreverses = true
-        animation.duration = animationDuration(startPoint: 0.125, variance: 0.025)
-        animation.repeatCount = Float.greatestFiniteMagnitude
-        return animation
-    }
-    
-    func animationDuration(startPoint: CFTimeInterval, variance: CFTimeInterval) -> CFTimeInterval
-    {
-        let random = CFTimeInterval(Int(arc4random_uniform(1000)) - 500) / 500.0
-        return startPoint + variance * random
-    }
+}
+
+fileprivate func rotationAnimation() -> CAAnimation
+{
+    let animation = CAKeyframeAnimation(keyPath: "transform.rotation.z")
+    animation.values = [0.02, -0.02]
+    animation.autoreverses = true
+    animation.duration = animationDuration(startPoint: 0.13, variance: 0.025)
+    animation.repeatCount = Float.greatestFiniteMagnitude
+    return animation
+}
+
+fileprivate func bounceAnimation() -> CAAnimation
+{
+    let animation = CAKeyframeAnimation(keyPath: "transform.translation.y")
+    animation.values = [0.3, -0.3]
+    animation.autoreverses = true
+    animation.duration = animationDuration(startPoint: 0.13, variance: 0.025)
+    animation.repeatCount = Float.greatestFiniteMagnitude
+    return animation
+}
+
+fileprivate func translationAnimation() -> CAAnimation
+{
+    let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+    animation.values = [0.3, -0.3]
+    animation.autoreverses = true
+    animation.duration = animationDuration(startPoint: 0.13, variance: 0.025)
+    animation.repeatCount = Float.greatestFiniteMagnitude
+    return animation
+}
+
+fileprivate func animationDuration(startPoint: CFTimeInterval, variance: CFTimeInterval) -> CFTimeInterval
+{
+    let random = CFTimeInterval(Int(arc4random_uniform(1000)) - 500) / 500.0
+    return startPoint + variance * random
 }

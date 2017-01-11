@@ -9,10 +9,11 @@
 import UIKit
 import GoogleMobileAds
 
+public let kMemoriseItDidBecomeActiveNotification = NSNotification.Name("net.maarut.Memorise-It.didBecomeActive")
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate
 {
-
     var window: UIWindow?
     var dataController: DataController!
 
@@ -30,21 +31,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     func pruneDocumentsDirectory()
     {
         
-        if let flashCardFileNames = dataController.allFlashCards().fetchedObjects?.map( { $0.audioFileName! } ),
-            let directory = FileManager.default.urls(for: .documentDirectory , in: .userDomainMask).first {
-            do {
-                let directoryFileNames = try FileManager.default.contentsOfDirectory(at: directory,
-                    includingPropertiesForKeys: nil).map( { $0.lastPathComponent } )
-                let directoryFileNamesSet = Set(directoryFileNames)
-                let flashCardFileNamesSet = Set(flashCardFileNames)
-                let extraneousFiles = directoryFileNamesSet.subtracting(flashCardFileNamesSet)
-                    .map { directory.appendingPathComponent($0) }
-                for filePath in extraneousFiles { try FileManager.default.removeItem(at: filePath) }
-            }
-            catch let error as NSError {
-                NSLog("\(error)\n\(error.localizedDescription)")
-            }
+        guard let flashCardFileNames = dataController.allFlashCards().fetchedObjects?.map( { $0.audioFileName! } ),
+            let directory = FileManager.default.urls(for: .documentDirectory , in: .userDomainMask).first else {
+                return
         }
+        do {
+            let directoryFileNames = try FileManager.default.contentsOfDirectory(at: directory,
+                includingPropertiesForKeys: nil).map( { $0.lastPathComponent } )
+            let directoryFileNamesSet = Set(directoryFileNames)
+            let flashCardFileNamesSet = Set(flashCardFileNames)
+            let extraneousFiles = directoryFileNamesSet.subtracting(flashCardFileNamesSet)
+                .map { directory.appendingPathComponent($0) }
+            for filePath in extraneousFiles { try FileManager.default.removeItem(at: filePath) }
+        }
+        catch let error as NSError {
+            NSLog("\(error)\n\(error.localizedDescription)")
+        }
+    }
+    
+    func applicationDidBecomeActive(_ application: UIApplication)
+    {
+        NotificationCenter.default.post(name: kMemoriseItDidBecomeActiveNotification, object: self)
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
@@ -59,10 +66,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-    }
-
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
