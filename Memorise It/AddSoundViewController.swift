@@ -61,21 +61,22 @@ class AddSoundViewController: UIViewController
         audioRecorder.record()
         recordButton.removeTarget(self, action: #selector(record(_:)), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(stopRecording(_:)), for: .touchUpInside)
-        recordButton.setTitle("Stop", for: .normal)
+        recordButton.setTitle("■", for: .normal)
         playButton.isEnabled = false
     }
     
     @IBAction func playAudio(_ sender: UIButton)
     {
-        if let recordedAudioFileName = recordedAudioFileName, let documentsDirectory = documentsDirectory {
-            audioPlayer = try! AVAudioPlayer(
-                contentsOf: documentsDirectory.appendingPathComponent(recordedAudioFileName))
-            audioPlayer.delegate = self
-            audioPlayer.play()
-            playButton.removeTarget(self, action: #selector(playAudio(_:)), for: .touchUpInside)
-            playButton.addTarget(self, action: #selector(stopPlayback(_:)), for: .touchUpInside)
-            playButton.setTitle("Stop", for: .normal)
+        guard let recordedAudioFileName = recordedAudioFileName, let documentsDirectory = documentsDirectory else {
+            return
         }
+        audioPlayer = try! AVAudioPlayer(
+            contentsOf: documentsDirectory.appendingPathComponent(recordedAudioFileName))
+        audioPlayer.delegate = self
+        audioPlayer.play()
+        playButton.removeTarget(self, action: #selector(playAudio(_:)), for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(stopPlayback(_:)), for: .touchUpInside)
+        playButton.setTitle("■", for: .normal)
     }
     
     func stopRecording(_ sender: UIButton)
@@ -83,7 +84,7 @@ class AddSoundViewController: UIViewController
         audioRecorder.stop()
         recordButton.removeTarget(self, action: #selector(stopRecording(_:)), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(record(_:)), for: .touchUpInside)
-        recordButton.setTitle("Record", for: .normal)
+        recordButton.setTitle("●", for: .normal)
         playButton.isEnabled = true
     }
     
@@ -92,7 +93,7 @@ class AddSoundViewController: UIViewController
         audioPlayer.stop()
         playButton.removeTarget(self, action: #selector(stopPlayback(_:)), for: .touchUpInside)
         playButton.addTarget(self, action: #selector(playAudio(_:)), for: .touchUpInside)
-        playButton.setTitle("Play", for: .normal)
+        playButton.setTitle("▶︎", for: .normal)
     }
     
     func cancelSelected(_ barButton: UIBarButtonItem)
@@ -107,11 +108,19 @@ class AddSoundViewController: UIViewController
         if let imageData = UIImagePNGRepresentation(image),
             let recordedAudioFileName = recordedAudioFileName {
             dataController.addFlashCard(image: imageData, audioFileName: recordedAudioFileName, dateAdded: Date())
+            navigationController?.dismiss(animated: true, completion: nil)
         }
         else {
+            let alertController = UIAlertController(title: "No Audio Recorded",
+                message: "No audio was recorded. Would you like to go back and record some audio or dimiss the screen?",
+                preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: { _ in
+                self.navigationController?.dismiss(animated: true, completion: nil)
+            }))
+            alertController.addAction(UIAlertAction(title: "Record Audio", style: .default, handler: nil))
+            present(alertController, animated: true, completion: nil)
             NSLog("Unable to save image and audio data.")
         }
-        navigationController?.dismiss(animated: true, completion: nil)
 
     }
 }
@@ -142,15 +151,16 @@ fileprivate extension AddSoundViewController
     
     func removePreviousRecording()
     {
-        if let recordedAudioFileName = recordedAudioFileName, let documentsDirectory = documentsDirectory {
-            do {
-                try FileManager.default.removeItem(at: documentsDirectory.appendingPathComponent(recordedAudioFileName))
-                self.recordedAudioFileName = nil
-            }
-            catch let error as NSError {
-                NSLog("Unable to delete previous recording.")
-                NSLog("\(error.localizedDescription)\n\(error.description)")
-            }
+        guard let recordedAudioFileName = recordedAudioFileName, let documentsDirectory = documentsDirectory else {
+            return
+        }
+        do {
+            try FileManager.default.removeItem(at: documentsDirectory.appendingPathComponent(recordedAudioFileName))
+            self.recordedAudioFileName = nil
+        }
+        catch let error as NSError {
+            NSLog("Unable to delete previous recording.")
+            NSLog("\(error.localizedDescription)\n\(error.description)")
         }
     }
 }

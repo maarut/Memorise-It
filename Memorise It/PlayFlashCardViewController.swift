@@ -24,6 +24,7 @@ protocol PlayFlashCardViewControllerDelegate: NSObjectProtocol
     func didPan(to position: Position)
     func dismissContentTo(in view: UIView) -> CGRect
     func zoomContentFrom(in view: UIView) -> CGRect
+    func willZoomContent()
     func didDismissContent()
     func flashCard(for position: Position) -> FlashCard
 }
@@ -46,27 +47,21 @@ class PlayFlashCardViewController: UIViewController
         informationOverlayContainer.layer.cornerRadius = 10
     }
     
-    override func viewWillAppear(_ animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
-        super.viewWillAppear(animated)
-        
-        guard let flashCard = delegate?.flashCard(for: .current),
-            let imageData = flashCard.image as Data? else {
+        super.viewDidAppear(animated)
+        guard let flashCard = delegate?.flashCard(for: .current), let imageData = flashCard.image as Data? else {
             return
         }
         let iv = UIImageView(image: UIImage(data: imageData))
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFit
+        iv.frame = delegate?.zoomContentFrom(in: view) ?? CGRect.zero
         view.addSubview(iv)
         imageView = iv
-    }
-    
-    override func viewDidAppear(_ animated: Bool)
-    {
-        super.viewDidAppear(animated)
-        imageView.frame = delegate?.zoomContentFrom(in: view) ?? CGRect.zero
+        delegate?.willZoomContent()
         UIView.animate(withDuration: 0.3) {
-            self.view.backgroundColor = UIColor.black
+            self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.999)
             self.imageView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
             self.imageView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
             self.imageView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
@@ -289,10 +284,10 @@ fileprivate extension PlayFlashCardViewController
         nextImage.image = UIImage(data: nextImageData as Data)
         let nextCoverView = UIView(frame: CGRect(origin: CGPoint(x: nextImage.frame.width, y: 0),
             size: CGSize(width: kCoverPanelWidth, height: view.frame.height)))
-        nextCoverView.backgroundColor = UIColor.black
+        nextCoverView.backgroundColor = view.backgroundColor
         let prevCoverView = UIView(frame: CGRect(origin: CGPoint(x: -kCoverPanelWidth, y: 0),
             size: CGSize(width: kCoverPanelWidth, height: view.frame.height)))
-        prevCoverView.backgroundColor = UIColor.black
+        prevCoverView.backgroundColor = view.backgroundColor
         view.addSubview(prevImage)
         view.addSubview(nextImage)
         view.addSubview(nextCoverView)

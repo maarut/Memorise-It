@@ -273,10 +273,9 @@ fileprivate extension ImageCollectionViewController
     
     func expandItem(at indexPath: IndexPath)
     {
-        guard let cell = collectionView.cellForItem(at: indexPath),
-            let detailVC = storyboard?.instantiateViewController(
-                withIdentifier: "flashCardDetailViewController") as? PlayFlashCardViewController else {
-                    return
+        guard let detailVC = storyboard?.instantiateViewController(
+            withIdentifier: "flashCardDetailViewController") as? PlayFlashCardViewController else {
+            return
         }
         selectedCell = indexPath
         detailVC.delegate = self
@@ -287,8 +286,8 @@ fileprivate extension ImageCollectionViewController
         detailVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         detailVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         detailVC.didMove(toParentViewController: self)
+        detailVC.view.layoutIfNeeded()
         detailViewController = detailVC
-        cell.contentView.isHidden = true
     }
     
     func selectItem(at indexPath: IndexPath)
@@ -343,6 +342,7 @@ extension ImageCollectionViewController: UICollectionViewDataSource
             imageView.image = UIImage(data: imageData as Data)
         }
         view.layer.borderColor = UIColor.green.cgColor
+        view.contentView.isHidden = indexPath == selectedCell
         if isEditing { view.startWobbling() }
         return view
     }
@@ -417,6 +417,12 @@ extension ImageCollectionViewController: UINavigationBarDelegate
 // MARK: - PlayFlashCardViewControllerDelegate Implementation
 extension ImageCollectionViewController: PlayFlashCardViewControllerDelegate
 {
+    func willZoomContent()
+    {
+        guard let selectedCell = selectedCell, let cell = collectionView.cellForItem(at: selectedCell) else { return }
+        cell.contentView.isHidden = true
+    }
+    
     func didPan(to position: Position)
     {
         guard let selectedCell = selectedCell else { return }
@@ -427,31 +433,34 @@ extension ImageCollectionViewController: PlayFlashCardViewControllerDelegate
         default:        return
         }
         if let currentCell = collectionView.cellForItem(at: selectedCell) { currentCell.contentView.isHidden = false }
+        collectionView.scrollToItem(at: newIndexPath, at: .centeredVertically, animated: true)
         if let newCell = collectionView.cellForItem(at: newIndexPath) { newCell.contentView.isHidden = true }
         self.selectedCell = newIndexPath
     }
     
     func dismissContentTo(in view: UIView) -> CGRect
     {
-        guard let selectedCell = selectedCell else { return CGRect.zero }
-        collectionView.scrollToItem(at: selectedCell, at: .centeredVertically, animated: false)
-        let cell = collectionView.cellForItem(at: selectedCell)!
+        guard let selectedCell = selectedCell, let cell = collectionView.cellForItem(at: selectedCell) else {
+            return CGRect.zero
+        }
         let origin = cell.convert(CGPoint.zero, to: view)
+        collectionView.scrollToItem(at: selectedCell, at: .bottom, animated: true)
         return CGRect(origin: origin, size: cell.frame.size)
     }
     
     func didDismissContent()
     {
-        guard let vc = detailViewController, let selectedCell = selectedCell,
-            let cell = collectionView.cellForItem(at: selectedCell) else {
+        defer {
+            detailViewController?.willMove(toParentViewController: nil)
+            detailViewController?.view.removeFromSuperview()
+            detailViewController?.removeFromParentViewController()
+            detailViewController = nil
+        }
+        guard let selectedCell = selectedCell, let cell = collectionView.cellForItem(at: selectedCell) else {
             return
         }
-        vc.willMove(toParentViewController: nil)
-        vc.view.removeFromSuperview()
-        vc.removeFromParentViewController()
-        detailViewController = nil
+        self.selectedCell = nil
         cell.contentView.isHidden = false
-        
     }
     
     func flashCard(for position: Position) -> FlashCard
