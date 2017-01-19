@@ -24,48 +24,68 @@ class AddSoundViewController: UIViewController
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var recordButton: UIButton!
-    @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var circleView: UIView!
+    fileprivate weak var circleShape: CAShapeLayer!
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
-        try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord)
-        navigationItem.hidesBackButton = true
-        navigationItem.setLeftBarButton(
-            UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelSelected(_:))),
-            animated: false)
-        navigationItem.setRightBarButton(
-            UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneSelected(_:))),
-            animated: false)
         imageView.image = image
-        do {
-            audioRecorder = try AVAudioRecorder(url: filePath().appendingPathComponent(fileName()), settings: [
-                AVFormatIDKey               : kAudioFormatMPEG4AAC          as AnyObject,
-                AVNumberOfChannelsKey       : 1                             as AnyObject,
-                AVSampleRateKey             : 44100.0                       as AnyObject,
-                AVEncoderAudioQualityKey    : AVAudioQuality.min.rawValue   as AnyObject,
-                AVEncoderBitRateKey         : 65536.0                       as AnyObject
-                ])
-            audioRecorder.delegate = self
-            audioRecorder.isMeteringEnabled = true
-        }
-        catch let error as NSError {
-            NSLog("\(error.description)\n\(error.localizedDescription)")
-        }
+        setupCircleView()
+        setupNavBar()
+        setupAudioRecorder()
     }
     
     @IBAction func record(_ button: UIButton)
     {
         removePreviousRecording()
         audioRecorder.record()
-        recordButton.removeTarget(self, action: #selector(record(_:)), for: .touchUpInside)
-        recordButton.addTarget(self, action: #selector(stopRecording(_:)), for: .touchUpInside)
-        recordButton.setTitle("■", for: .normal)
-        playButton.isEnabled = false
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
+        animation.fromValue = 0.0
+        animation.toValue = 1.0
+        animation.duration = 5.0
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        animation.delegate = self
+        circleShape.strokeEnd = 1.0
+        circleShape.add(animation, forKey: "strokeEnd")
     }
     
-    @IBAction func playAudio(_ sender: UIButton)
+    @IBAction func stopRecording(_ sender: UIButton)
+    {
+        stopRecording()
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        circleShape.strokeEnd = 0.0
+        CATransaction.commit()
+        recordButton.setTitle("▶", for: .normal)
+        recordButton.removeTarget(self, action: #selector(stopRecording(_:)), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(stopPlayback(_:)), for: .touchUpInside)
+        recordButton.removeTarget(self, action: #selector(record(_:)), for: .touchDown)
+        recordButton.addTarget(self, action: #selector(playAudio(_:)), for: .touchDown)
+    }
+    
+    @IBAction func cancelRecording(_ sender: UIButton)
+    {
+        audioRecorder.stop()
+        removePreviousRecording()
+    }
+    
+    @IBAction func clearAudio(_ button: UIButton)
+    {
+        removePreviousRecording()
+        recordButton.setTitle("●", for: .normal)
+        recordButton.removeTarget(self, action: #selector(stopPlayback(_:)), for: .touchUpInside)
+        recordButton.removeTarget(self, action: #selector(playAudio(_:)), for: .touchDown)
+        recordButton.addTarget(self, action: #selector(stopRecording(_:)), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(record(_:)), for: .touchDown)
+    }
+}
+
+// MARK: - Dynamic Functions
+fileprivate extension AddSoundViewController
+{
+    dynamic func playAudio(_ sender: UIButton)
     {
         guard let recordedAudioFileName = recordedAudioFileName, let documentsDirectory = documentsDirectory else {
             return
@@ -74,35 +94,33 @@ class AddSoundViewController: UIViewController
             contentsOf: documentsDirectory.appendingPathComponent(recordedAudioFileName))
         audioPlayer.delegate = self
         audioPlayer.play()
-        playButton.removeTarget(self, action: #selector(playAudio(_:)), for: .touchUpInside)
-        playButton.addTarget(self, action: #selector(stopPlayback(_:)), for: .touchUpInside)
-        playButton.setTitle("■", for: .normal)
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
+        animation.fromValue = 0.0
+        animation.toValue = 1.0
+        animation.duration = audioPlayer.duration + 0.01
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        animation.delegate = self
+        circleShape.strokeEnd = 1.0
+        circleShape.add(animation, forKey: "strokeEnd")
+        
     }
     
-    func stopRecording(_ sender: UIButton)
+    dynamic func stopPlayback(_ sender: UIButton)
     {
-        audioRecorder.stop()
-        recordButton.removeTarget(self, action: #selector(stopRecording(_:)), for: .touchUpInside)
-        recordButton.addTarget(self, action: #selector(record(_:)), for: .touchUpInside)
-        recordButton.setTitle("●", for: .normal)
-        playButton.isEnabled = true
+        stopPlayback()
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        circleShape.strokeEnd = 0.0
+        CATransaction.commit()
     }
     
-    func stopPlayback(_ sender: UIButton)
-    {
-        audioPlayer.stop()
-        playButton.removeTarget(self, action: #selector(stopPlayback(_:)), for: .touchUpInside)
-        playButton.addTarget(self, action: #selector(playAudio(_:)), for: .touchUpInside)
-        playButton.setTitle("▶︎", for: .normal)
-    }
-    
-    func cancelSelected(_ barButton: UIBarButtonItem)
+    dynamic func cancelSelected(_ barButton: UIBarButtonItem)
     {
         removePreviousRecording()
         navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    func doneSelected(_ barButton: UIBarButtonItem)
+    dynamic func doneSelected(_ barButton: UIBarButtonItem)
     {
         // save the image and sound to the storage medium.
         if let imageData = UIImagePNGRepresentation(image),
@@ -121,13 +139,60 @@ class AddSoundViewController: UIViewController
             present(alertController, animated: true, completion: nil)
             NSLog("Unable to save image and audio data.")
         }
-
+        
     }
 }
 
 // MARK: - Private Functions
 fileprivate extension AddSoundViewController
 {
+    func setupNavBar()
+    {
+        navigationItem.hidesBackButton = true
+        navigationItem.setLeftBarButton(
+            UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelSelected(_:))),
+            animated: false)
+        navigationItem.setRightBarButton(
+            UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneSelected(_:))),
+            animated: false)
+    }
+    
+    func setupAudioRecorder()
+    {
+        try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord, with: .defaultToSpeaker)
+        do {
+            audioRecorder = try AVAudioRecorder(url: filePath().appendingPathComponent(fileName()), settings: [
+                AVFormatIDKey               : kAudioFormatMPEG4AAC          as AnyObject,
+                AVNumberOfChannelsKey       : 1                             as AnyObject,
+                AVSampleRateKey             : 44100.0                       as AnyObject,
+                AVEncoderAudioQualityKey    : AVAudioQuality.min.rawValue   as AnyObject,
+                AVEncoderBitRateKey         : 65536.0                       as AnyObject
+                ])
+            audioRecorder.delegate = self
+            audioRecorder.isMeteringEnabled = true
+        }
+        catch let error as NSError {
+            NSLog("\(error.description)\n\(error.localizedDescription)")
+        }
+    }
+    
+    func setupCircleView()
+    {
+        let circleLayer = CAShapeLayer()
+        let point = CGPoint(x: circleView.frame.width / 2.0, y: circleView.frame.height / 2.0)
+        circleLayer.path = UIBezierPath(arcCenter: point,
+            radius: circleView.frame.width / 2.0 - 5.0,
+            startAngle: CGFloat(0.0 - M_PI_2),
+            endAngle: CGFloat(M_PI.multiplied(by: 2.0) - M_PI_2),
+            clockwise: true).cgPath
+        circleLayer.lineWidth = 5.0
+        circleLayer.fillColor = UIColor.clear.cgColor
+        circleLayer.strokeColor = UIColor.blue.cgColor
+        circleLayer.strokeEnd = 0.0
+        circleView.layer.addSublayer(circleLayer)
+        circleShape = circleLayer
+    }
+    
     func fileName() -> String
     {
         let dateFormatter = DateFormatter()
@@ -151,17 +216,23 @@ fileprivate extension AddSoundViewController
     
     func removePreviousRecording()
     {
-        guard let recordedAudioFileName = recordedAudioFileName, let documentsDirectory = documentsDirectory else {
-            return
-        }
-        do {
-            try FileManager.default.removeItem(at: documentsDirectory.appendingPathComponent(recordedAudioFileName))
-            self.recordedAudioFileName = nil
-        }
-        catch let error as NSError {
-            NSLog("Unable to delete previous recording.")
-            NSLog("\(error.localizedDescription)\n\(error.description)")
-        }
+        guard recordedAudioFileName != nil else { return }
+        if audioRecorder.deleteRecording() { recordedAudioFileName = nil }
+        else { NSLog("Unable to delete previous recording.") }
+    }
+    
+    func stopRecording()
+    {
+        audioRecorder.stop()
+        circleShape.removeAllAnimations()
+    }
+    
+    func stopPlayback()
+    {
+        audioPlayer.stop()
+        audioPlayer.currentTime = 0.0
+        circleShape.removeAllAnimations()
+        
     }
 }
 
@@ -170,7 +241,7 @@ extension AddSoundViewController: AVAudioPlayerDelegate
 {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool)
     {
-        stopPlayback(playButton)
+        stopPlayback()
         if !flag { NSLog("Did not successfully play back audio.") }
     }
 }
@@ -191,5 +262,17 @@ extension AddSoundViewController: AVAudioRecorderDelegate
             NSLog(e.localizedDescription)
         }
         else { NSLog("ERROR!") }
+    }
+}
+
+extension AddSoundViewController: CAAnimationDelegate
+{
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool)
+    {
+        if flag {
+            if audioRecorder.isRecording { stopRecording() }
+            else { stopPlayback() }
+        }
+        
     }
 }
