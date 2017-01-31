@@ -240,8 +240,11 @@ the audio associated with it.</string>
                                 <rect key="frame" x="143" y="532" width="128" height="128"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Du-AE-hHx">
-                                        <rect key="frame" x="49" y="49" width="30" height="30"/>
-                                        <state key="normal" title="●"/>
+                                        <rect key="frame" x="49" y="38.666666666666629" width="30" height="51"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                        <state key="normal" title="●">
+                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </state>
                                         <connections>
                                             <action selector="cancelRecording:" destination="uma-XZ-tLQ" eventType="touchUpOutside" id="T7E-WJ-ldv"/>
                                             <action selector="record:" destination="uma-XZ-tLQ" eventType="touchDown" id="JHB-EQ-cAq"/>
@@ -261,7 +264,8 @@ the audio associated with it.</string>
                                 <rect key="frame" x="20" y="668" width="374" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eYW-bU-tx4">
-                                        <rect key="frame" x="167" y="15" width="39" height="30"/>
+                                        <rect key="frame" x="164.66666666666666" y="13.666666666666629" width="44" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Reset"/>
                                         <connections>
                                             <action selector="clearAudio:" destination="uma-XZ-tLQ" eventType="touchUpInside" id="Xvd-5i-Q1q"/>

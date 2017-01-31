@@ -11,6 +11,8 @@ import AVFoundation
 import CoreAudio
 
 fileprivate let kAddSoundViewControllerErrorDomain = "net.maarut.Memorise-It.AddSoundViewController"
+fileprivate let kRecordColour = UIColor(colorLiteralRed: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
+fileprivate let kPlayColour = UIColor(colorLiteralRed: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
 
 class AddSoundViewController: UIViewController
 {
@@ -59,10 +61,12 @@ class AddSoundViewController: UIViewController
         circleShape.strokeEnd = 0.0
         CATransaction.commit()
         recordButton.setTitle("▶", for: .normal)
+        recordButton.setTitleColor(kPlayColour, for: .normal)
         recordButton.removeTarget(self, action: #selector(stopRecording(_:)), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(stopPlayback(_:)), for: .touchUpInside)
         recordButton.removeTarget(self, action: #selector(record(_:)), for: .touchDown)
         recordButton.addTarget(self, action: #selector(playAudio(_:)), for: .touchDown)
+        circleShape.strokeColor = kPlayColour.cgColor
     }
     
     @IBAction func cancelRecording(_ sender: UIButton)
@@ -75,10 +79,12 @@ class AddSoundViewController: UIViewController
     {
         removePreviousRecording()
         recordButton.setTitle("●", for: .normal)
+        recordButton.setTitleColor(kRecordColour, for: .normal)
         recordButton.removeTarget(self, action: #selector(stopPlayback(_:)), for: .touchUpInside)
         recordButton.removeTarget(self, action: #selector(playAudio(_:)), for: .touchDown)
         recordButton.addTarget(self, action: #selector(stopRecording(_:)), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(record(_:)), for: .touchDown)
+        circleShape.strokeColor = kRecordColour.cgColor
     }
 }
 
@@ -178,19 +184,19 @@ fileprivate extension AddSoundViewController
     
     func setupCircleView()
     {
-        let circleLayer = CAShapeLayer()
+        let circleShape = CAShapeLayer()
         let point = CGPoint(x: circleView.frame.width / 2.0, y: circleView.frame.height / 2.0)
-        circleLayer.path = UIBezierPath(arcCenter: point,
+        circleShape.path = UIBezierPath(arcCenter: point,
             radius: circleView.frame.width / 2.0 - 5.0,
             startAngle: CGFloat(0.0 - M_PI_2),
             endAngle: CGFloat(M_PI.multiplied(by: 2.0) - M_PI_2),
             clockwise: true).cgPath
-        circleLayer.lineWidth = 5.0
-        circleLayer.fillColor = UIColor.clear.cgColor
-        circleLayer.strokeColor = UIColor.blue.cgColor
-        circleLayer.strokeEnd = 0.0
-        circleView.layer.addSublayer(circleLayer)
-        circleShape = circleLayer
+        circleShape.lineWidth = 5.0
+        circleShape.fillColor = UIColor.clear.cgColor
+        circleShape.strokeColor = kRecordColour.cgColor
+        circleShape.strokeEnd = 0.0
+        circleView.layer.addSublayer(circleShape)
+        self.circleShape = circleShape
     }
     
     func fileName() -> String
