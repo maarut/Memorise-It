@@ -136,14 +136,14 @@ fileprivate extension AddSoundViewController
         }
         else {
             let alertController = UIAlertController(title: "No Audio Recorded",
-                message: "No audio was recorded. Would you like to go back and record some audio or dimiss the screen?",
+                message: "No audio was recorded. Would you like to cancel and go back to the main screen or record some audio and save the flash card?",
                 preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: { _ in
+            alertController.addAction(UIAlertAction(title: "Main Screen", style: .default, handler: { _ in
                 self.navigationController?.dismiss(animated: true, completion: nil)
             }))
             alertController.addAction(UIAlertAction(title: "Record Audio", style: .default, handler: nil))
             present(alertController, animated: true, completion: nil)
-            NSLog("Unable to save image and audio data.")
+            
         }
         
     }

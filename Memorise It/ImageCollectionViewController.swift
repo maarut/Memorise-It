@@ -315,7 +315,7 @@ extension ImageCollectionViewController: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
         forItemAt indexPath: IndexPath)
     {
-        if isEditing { cell.startWobbling() }
+        isEditing ? cell.startWobbling() : cell.endWobble()
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
@@ -433,9 +433,11 @@ extension ImageCollectionViewController: PlayFlashCardViewControllerDelegate
         default:        return
         }
         if let currentCell = collectionView.cellForItem(at: selectedCell) { currentCell.contentView.isHidden = false }
-        collectionView.scrollToItem(at: newIndexPath, at: .centeredVertically, animated: true)
-        if let newCell = collectionView.cellForItem(at: newIndexPath) { newCell.contentView.isHidden = true }
+        collectionView.scrollToItem(at: newIndexPath, at: .centeredVertically, animated: false)
         self.selectedCell = newIndexPath
+        UIView.animate(withDuration: 0, animations: { }, completion: { _ in
+            if let newCell = self.collectionView.cellForItem(at: newIndexPath) { newCell.contentView.isHidden = true }
+        })
     }
     
     func dismissContentTo(in view: UIView) -> CGRect

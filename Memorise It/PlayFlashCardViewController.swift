@@ -44,6 +44,7 @@ class PlayFlashCardViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         informationOverlayContainer.layer.cornerRadius = 10
     }
     
