@@ -11,8 +11,8 @@ import AVFoundation
 import CoreAudio
 
 fileprivate let kAddSoundViewControllerErrorDomain = "net.maarut.Memorise-It.AddSoundViewController"
-fileprivate let kRecordColour = UIColor(colorLiteralRed: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
-fileprivate let kPlayColour = UIColor(colorLiteralRed: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
+fileprivate let kRecordColour = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
+fileprivate let kPlayColour = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
 
 class AddSoundViewController: UIViewController
 {
@@ -91,7 +91,7 @@ class AddSoundViewController: UIViewController
 // MARK: - Dynamic Functions
 fileprivate extension AddSoundViewController
 {
-    dynamic func playAudio(_ sender: UIButton)
+    @objc func playAudio(_ sender: UIButton)
     {
         guard let recordedAudioFileName = recordedAudioFileName, let documentsDirectory = documentsDirectory else {
             return
@@ -111,7 +111,7 @@ fileprivate extension AddSoundViewController
         
     }
     
-    dynamic func stopPlayback(_ sender: UIButton)
+    @objc func stopPlayback(_ sender: UIButton)
     {
         stopPlayback()
         CATransaction.begin()
@@ -120,13 +120,13 @@ fileprivate extension AddSoundViewController
         CATransaction.commit()
     }
     
-    dynamic func cancelSelected(_ barButton: UIBarButtonItem)
+    @objc func cancelSelected(_ barButton: UIBarButtonItem)
     {
         removePreviousRecording()
         navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    dynamic func doneSelected(_ barButton: UIBarButtonItem)
+    @objc func doneSelected(_ barButton: UIBarButtonItem)
     {
         // save the image and sound to the storage medium.
         if let imageData = UIImagePNGRepresentation(image),
@@ -188,8 +188,8 @@ fileprivate extension AddSoundViewController
         let point = CGPoint(x: circleView.frame.width / 2.0, y: circleView.frame.height / 2.0)
         circleShape.path = UIBezierPath(arcCenter: point,
             radius: circleView.frame.width / 2.0 - 5.0,
-            startAngle: CGFloat(0.0 - M_PI_2),
-            endAngle: CGFloat(M_PI.multiplied(by: 2.0) - M_PI_2),
+            startAngle: CGFloat(0.0 - .pi / 2),
+            endAngle: CGFloat(2.0 * .pi - .pi / 2),
             clockwise: true).cgPath
         circleShape.lineWidth = 5.0
         circleShape.fillColor = UIColor.clear.cgColor
@@ -263,7 +263,7 @@ extension AddSoundViewController: AVAudioRecorderDelegate
     
     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?)
     {
-        if let e = error as? NSError {
+        if let e = error as NSError? {
             NSLog(e.description)
             NSLog(e.localizedDescription)
         }

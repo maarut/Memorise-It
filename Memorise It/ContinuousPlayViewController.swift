@@ -123,7 +123,7 @@ fileprivate extension ContinuousPlayViewController
     func currentImage() -> UIImage
     {
         guard flashCards.count > 0 else { return UIImage() }
-        if let imageData = flashCards.first?.image as? Data,
+        if let imageData = flashCards.first?.image as Data?,
             let image = UIImage(data: imageData) {
             return image
         }

@@ -95,7 +95,7 @@ class ImageCollectionViewController: UIViewController
 // MARK: - Dynamic Functions
 fileprivate extension ImageCollectionViewController
 {
-    dynamic func applicationDidBecomeActive(_ notification: Notification)
+    @objc func applicationDidBecomeActive(_ notification: Notification)
     {
         let selector = isEditing ?
             #selector(UICollectionViewCell.startWobbling) :
@@ -106,17 +106,17 @@ fileprivate extension ImageCollectionViewController
         }
     }
     
-    dynamic func editButtonTapped(_ sender: UIBarButtonItem)
+    @objc func editButtonTapped(_ sender: UIBarButtonItem)
     {
         setEditing(true, animated: true)
     }
     
-    dynamic func doneTapped(_ sender: UIBarButtonItem)
+    @objc func doneTapped(_ sender: UIBarButtonItem)
     {
         setEditing(false, animated: true)
     }
     
-    dynamic func deleteSelected(_ sender: UIBarButtonItem)
+    @objc func deleteSelected(_ sender: UIBarButtonItem)
     {
         let flashCards = selectedCells.flatMap { allFlashCards.fetchedObjects?[$0.row] }
         dataController.delete(flashCards)
@@ -508,12 +508,12 @@ extension ImageCollectionViewController: GADBannerViewDelegate
 // Code found from http://stackoverflow.com/a/15842191/7140876. Some values adjusted to get a better animation.
 fileprivate extension UICollectionViewCell
 {
-    dynamic func endWobble()
+    @objc func endWobble()
     {
         layer.removeAllAnimations()
     }
     
-    dynamic func startWobbling()
+    @objc func startWobbling()
     {
         layer.add(rotationAnimation(), forKey: "rotation")
         layer.add(bounceAnimation(), forKey: "bounce")

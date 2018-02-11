@@ -86,8 +86,8 @@ class DataController
             mainThreadContext.perform {
                 let flashCard = FlashCard(context: self.mainThreadContext)
                 flashCard.audioFileName = audioFileName
-                flashCard.image = image as NSData
-                flashCard.dateAdded = dateAdded as NSDate
+                flashCard.image = image
+                flashCard.dateAdded = dateAdded as Date
                 self.save()
             }
         }

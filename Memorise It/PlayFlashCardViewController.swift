@@ -112,7 +112,7 @@ class PlayFlashCardViewController: UIViewController
         sender.addTarget(self, action: selector)
     }
     
-    func stopPlayback(_ sender: UITapGestureRecognizer)
+    @objc func stopPlayback(_ sender: UITapGestureRecognizer)
     {
         sender.removeTarget(self, action: #selector(stopPlayback(_:)))
         sender.addTarget(self, action: #selector(tapRecognised(_:)))
@@ -133,7 +133,7 @@ extension PlayFlashCardViewController: AVAudioPlayerDelegate
 // MARK: - Private Functions
 fileprivate extension PlayFlashCardViewController
 {
-    dynamic func panToNextImage(using sender: UIPanGestureRecognizer)
+    @objc func panToNextImage(using sender: UIPanGestureRecognizer)
     {
         guard let previousFlashCard = delegate?.flashCard(for: .previous),
             let nextFlashCard = delegate?.flashCard(for: .next) else {
@@ -168,7 +168,7 @@ fileprivate extension PlayFlashCardViewController
                 }
                 for view in coverViews { view.transform = CGAffineTransform(translationX: translationX, y: 0) }
             }, completion: { _ in
-                if let image = self.delegate?.flashCard(for: .current).image as? Data {
+                if let image = self.delegate?.flashCard(for: .current).image as Data? {
                     self.imageView.image = UIImage(data: image)
                 }
                 for view in imageViews {
@@ -185,7 +185,7 @@ fileprivate extension PlayFlashCardViewController
         }
     }
     
-    dynamic func panToDismiss(using sender: UIPanGestureRecognizer)
+    @objc func panToDismiss(using sender: UIPanGestureRecognizer)
     {
         let translation = sender.translation(in: self.view)
         let magnitude = sqrt(pow(translation.x, 2) + pow(translation.y, 2))
@@ -233,10 +233,10 @@ fileprivate extension PlayFlashCardViewController
     func determinePanDirection(_ point: CGPoint) -> UISwipeGestureRecognizerDirection?
     {
         switch (point.x, point.y) {
-        case let (x, y) where x < y && y <= 0:  return UISwipeGestureRecognizerDirection.left
-        case let (x, y) where x > y && y >= 0:  return UISwipeGestureRecognizerDirection.right
-        case let (x, y) where y < x && x <= 0:  return UISwipeGestureRecognizerDirection.up
-        case let (x, y) where y > x && x >= 0:  return UISwipeGestureRecognizerDirection.down
+        case let (x, y) where x < y && y <= 0:  return .left
+        case let (x, y) where x > y && y >= 0:  return .right
+        case let (x, y) where y < x && x <= 0:  return .up
+        case let (x, y) where y > x && x >= 0:  return .down
         default:                                return nil
         }
     }
